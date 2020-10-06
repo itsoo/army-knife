@@ -7,7 +7,6 @@ package com.cupshe.ak;
  */
 public class StringUtils {
 
-    public static final String SPACE = " ";
     public static final String EMPTY = "";
 
     public static boolean isEmpty(final CharSequence cs) {
