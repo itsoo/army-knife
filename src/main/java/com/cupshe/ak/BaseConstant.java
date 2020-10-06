@@ -13,6 +13,12 @@ public class BaseConstant {
     /*** trance id key */
     public static final String TRANCE_ID_KEY = "Trance-ID";
 
+    /*** Session ID */
+    public static final String SESSION_KEY = "sessionId";
+
+    /*** 身份认证字段 */
+    public static final String AUTHORIZATION = "Authorization";
+
     /*** 调用来源头部标识 */
     public static final String CALL_SOURCE_KEY = "Call-Source";
 
