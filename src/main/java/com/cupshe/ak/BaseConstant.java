@@ -7,13 +7,13 @@ package com.cupshe.ak;
  */
 public class BaseConstant {
 
-    /*** trance id store */
-    public static final ThreadLocal<String> TRANCE_ID_STORE = new ThreadLocal<>();
+    /*** trace-id store */
+    public static final ThreadLocal<String> TRACE_ID_STORE = new ThreadLocal<>();
 
-    /*** trance id key */
-    public static final String TRANCE_ID_KEY = "Trance-ID";
+    /*** trace-id key */
+    public static final String TRACE_ID_KEY = "Trace-ID";
 
-    /*** Session ID */
+    /*** session-id */
     public static final String SESSION_KEY = "sessionId";
 
     /*** 身份认证字段 */

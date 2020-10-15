@@ -43,12 +43,12 @@ public class JsonUtils {
     public static JavaType getJavaType(Type genericType) {
         if (genericType instanceof ParameterizedType) {
             Type[] actualTypes = ((ParameterizedType) genericType).getActualTypeArguments();
-            Class<?> rowClass = (Class<?>) ((ParameterizedType) genericType).getRawType();
             JavaType[] javaTypes = new JavaType[actualTypes.length];
             for (int i = 0; i < actualTypes.length; i++) {
                 javaTypes[i] = getJavaType(actualTypes[i]);
             }
 
+            Class<?> rowClass = (Class<?>) ((ParameterizedType) genericType).getRawType();
             return TypeFactory.defaultInstance().constructParametricType(rowClass, javaTypes);
         }
 
