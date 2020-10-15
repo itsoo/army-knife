@@ -3,11 +3,11 @@ package com.cupshe.ak;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * TranceIdUtils
+ * TraceIdUtils
  *
  * @author zxy
  */
-public class TranceIdUtils {
+public class TraceIdUtils {
 
     public static String getTranceId() {
         try {
