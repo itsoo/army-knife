@@ -36,8 +36,6 @@ public class AutoTraceIdConfig implements WebMvcConfigurer {
                 TRACE_ID_STORE.set(traceId);
             }
 
-            log.info("AAAAAAAAAA ::::: " + traceId);
-
             return true;
         }
     }
