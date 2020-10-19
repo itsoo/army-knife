@@ -1,4 +1,4 @@
-package com.cupshe.ak;
+package com.cupshe.ak.text;
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
@@ -26,7 +26,17 @@ import java.util.Objects;
 public class Encrypts {
 
     /*** 系统内部公用秘钥 */
-    public static final String DEFAULT_RULES = "n9FsDeFA7tB4xSRue0S1";
+    private final String rules;
+
+    private static final String DEFAULT_RULES = "cupshe";
+
+    public Encrypts() {
+        this.rules = DEFAULT_RULES;
+    }
+
+    public Encrypts(String rules) {
+        this.rules = rules;
+    }
 
     /**
      * MD5 加密
@@ -34,8 +44,8 @@ public class Encrypts {
      * @param content 源内容
      * @return 加密内容
      */
-    public static String md5Encode(String content) {
-        Objects.requireNonNull(content, "<String>value must not be null");
+    public String md5Encode(String content) {
+        Objects.requireNonNull(content, "content cannot be null.");
 
         try {
             MessageDigest message = MessageDigest.getInstance("MD5");
@@ -48,16 +58,15 @@ public class Encrypts {
     /**
      * AES 加密
      *
-     * @param rules   秘钥
      * @param content 源内容
      * @return 加密内容
      */
-    public static String aesEncode(String rules, String content) {
-        Objects.requireNonNull(content, "Encrypting content must not be null");
+    public String aesEncode(String content) {
+        Objects.requireNonNull(content, "content cannot be null.");
 
         try {
             byte[] byteEncode = content.getBytes(StandardCharsets.UTF_8);
-            byte[] byteAes = getCipher(Cipher.ENCRYPT_MODE, rules).doFinal(byteEncode);
+            byte[] byteAes = getCipher(Cipher.ENCRYPT_MODE).doFinal(byteEncode);
             return new BASE64Encoder().encode(byteAes);
         } catch (GeneralSecurityException e) {
             throw new RuntimeException(e);
@@ -67,23 +76,22 @@ public class Encrypts {
     /**
      * AES 解密
      *
-     * @param rules   秘钥
      * @param content 源内容
      * @return 解密内容
      */
-    public static String aesDecode(String rules, String content) {
-        Objects.requireNonNull(content, "Encrypting content must not be null");
+    public String aesDecode(String content) {
+        Objects.requireNonNull(content, "content cannot be null.");
 
         try {
             byte[] byteContent = new BASE64Decoder().decodeBuffer(content);
-            byte[] byteDecode = getCipher(Cipher.DECRYPT_MODE, rules).doFinal(byteContent);
+            byte[] byteDecode = getCipher(Cipher.DECRYPT_MODE).doFinal(byteContent);
             return new String(byteDecode, StandardCharsets.UTF_8);
         } catch (GeneralSecurityException | IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static Cipher getCipher(int mode, String rules) {
+    private Cipher getCipher(int mode) {
         try {
             KeyGenerator keygen = KeyGenerator.getInstance("AES");
             keygen.init(128, new SecureRandom((rules.getBytes(StandardCharsets.UTF_8))));
@@ -92,7 +100,6 @@ public class Encrypts {
             SecretKey key = new SecretKeySpec(raw, "AES");
             Cipher cipher = Cipher.getInstance("AES");
             cipher.init(mode, key);
-
             return cipher;
         } catch (GeneralSecurityException e) {
             throw new RuntimeException(e);

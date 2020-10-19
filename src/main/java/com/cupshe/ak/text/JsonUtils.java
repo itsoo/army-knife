@@ -1,4 +1,4 @@
-package com.cupshe.ak;
+package com.cupshe.ak.text;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;

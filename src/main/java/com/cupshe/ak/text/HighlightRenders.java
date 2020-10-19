@@ -1,4 +1,4 @@
-package com.cupshe.ak;
+package com.cupshe.ak.text;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

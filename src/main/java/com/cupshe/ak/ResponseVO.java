@@ -66,7 +66,7 @@ public class ResponseVO<T> implements Serializable {
         private List<T> list;
 
         static <T> RetData<T> of(List<T> list) {
-            final RetData<T> result = new RetData<>();
+            RetData<T> result = new RetData<>();
             result.setList(list);
             return result;
         }

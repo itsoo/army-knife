@@ -1,4 +1,4 @@
-package com.cupshe.ak;
+package com.cupshe.ak.core;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;

@@ -1,4 +1,4 @@
-package com.cupshe.ak;
+package com.cupshe.ak.core;
 
 import java.lang.annotation.*;
 

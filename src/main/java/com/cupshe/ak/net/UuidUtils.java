@@ -1,4 +1,4 @@
-package com.cupshe.ak;
+package com.cupshe.ak.net;
 
 import java.util.UUID;
 

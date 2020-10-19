@@ -1,7 +1,8 @@
 package com.cupshe.ak;
 
+import com.cupshe.ak.core.Kv;
+
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,8 +39,7 @@ public class BeanUtils {
         String methodName = getterMethodName(filedName);
 
         try {
-            Method getter = o.getClass().getDeclaredMethod(methodName);
-            return getter.invoke(o);
+            return o.getClass().getDeclaredMethod(methodName).invoke(o);
         } catch (Exception e) {
             return null;
         }
@@ -47,14 +47,14 @@ public class BeanUtils {
 
     private static String getterMethodName(String fieldName) {
         char c = fieldName.charAt(0);
-        if (needUpperFirstChar(c)) {
+        if (needUpperFirstLetter(c)) {
             c -= ('a' - 'A');
         }
 
         return "get" + c + (fieldName.length() > 1 ? fieldName.substring(1) : "");
     }
 
-    private static boolean needUpperFirstChar(char c) {
+    private static boolean needUpperFirstLetter(char c) {
         return c >= 'a' && c <= 'z';
     }
 }

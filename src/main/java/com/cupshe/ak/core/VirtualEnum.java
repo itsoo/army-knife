@@ -1,4 +1,4 @@
-package com.cupshe.ak;
+package com.cupshe.ak.core;
 
 /**
  * 虚拟场

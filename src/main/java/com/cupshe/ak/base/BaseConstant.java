@@ -1,4 +1,4 @@
-package com.cupshe.ak;
+package com.cupshe.ak.base;
 
 /**
  * BaseConstant
@@ -8,7 +8,7 @@ package com.cupshe.ak;
 public class BaseConstant {
 
     /*** trace-id store */
-    public static final ThreadLocal<String> TRACE_ID_STORE = new ThreadLocal<>();
+    public static final InheritableThreadLocal<String> TRACE_ID_STORE = new InheritableThreadLocal<>();
 
     /*** trace-id key */
     public static final String TRACE_ID_KEY = "Trace-ID";

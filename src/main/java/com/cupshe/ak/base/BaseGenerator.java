@@ -1,4 +1,6 @@
-package com.cupshe.ak;
+package com.cupshe.ak.base;
+
+import com.cupshe.ak.net.AddressUtils;
 
 import java.util.Random;
 
