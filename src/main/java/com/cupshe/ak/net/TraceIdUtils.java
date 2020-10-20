@@ -1,6 +1,6 @@
 package com.cupshe.ak.net;
 
-import com.cupshe.ak.base.BaseConstant;
+import com.cupshe.ak.common.BaseConstant;
 import com.cupshe.ak.text.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;

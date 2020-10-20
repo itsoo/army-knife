@@ -1,4 +1,4 @@
-package com.cupshe.ak;
+package com.cupshe.ak.exception;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

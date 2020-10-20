@@ -1,4 +1,4 @@
-package com.cupshe.ak;
+package com.cupshe.ak.page;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;

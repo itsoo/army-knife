@@ -1,4 +1,4 @@
-package com.cupshe.ak;
+package com.cupshe.ak.bean;
 
 import com.cupshe.ak.core.Kv;
 

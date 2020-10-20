@@ -1,4 +1,4 @@
-package com.cupshe.ak.base;
+package com.cupshe.ak.common;
 
 import com.cupshe.ak.text.StringUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -10,8 +10,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.cupshe.ak.base.BaseConstant.TRACE_ID_KEY;
-import static com.cupshe.ak.base.BaseConstant.TRACE_ID_STORE;
+import static com.cupshe.ak.common.BaseConstant.TRACE_ID_KEY;
+import static com.cupshe.ak.common.BaseConstant.TRACE_ID_STORE;
 
 /**
  * TraceIdInterceptor

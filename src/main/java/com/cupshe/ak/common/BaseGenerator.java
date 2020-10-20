@@ -1,4 +1,4 @@
-package com.cupshe.ak.base;
+package com.cupshe.ak.common;
 
 import com.cupshe.ak.net.AddressUtils;
 

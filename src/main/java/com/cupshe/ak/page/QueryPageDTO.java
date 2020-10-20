@@ -1,4 +1,4 @@
-package com.cupshe.ak;
+package com.cupshe.ak.page;
 
 /**
  * 分页查询 DTO

@@ -30,35 +30,41 @@ public class ResponseVO<T> implements Serializable {
     }
 
     public static <T> ResponseVO<T> of(T data) {
-        ResponseVO<T> responseVO = new ResponseVO<>();
-        responseVO.setData(data);
-        return responseVO;
+        ResponseVO<T> result = new ResponseVO<>();
+        result.setData(data);
+        return result;
     }
 
     public static <T> ResponseVO<RetData<T>> of(List<T> list) {
-        ResponseVO<RetData<T>> responseVO = new ResponseVO<>();
-        responseVO.setData(RetData.of(list));
-        return responseVO;
+        ResponseVO<RetData<T>> result = new ResponseVO<>();
+        result.setData(RetData.of(list));
+        return result;
     }
 
     public static ResponseVO<Exception> of(Exception e) {
-        ResponseVO<Exception> responseVO = new ResponseVO<>();
-        responseVO.setSuccess(Boolean.FALSE);
-        responseVO.setRetCode("000001");
-        responseVO.setRetInfo(defaultErrorMessage(e.getMessage()));
-        return responseVO;
+        ResponseVO<Exception> result = new ResponseVO<>();
+        result.setSuccess(Boolean.FALSE);
+        result.setRetCode("000001");
+        result.setRetInfo(defaultErrorMessage(e.getMessage()));
+        return result;
     }
 
     public static ResponseVO<String> of(String retCode, String retInfo) {
-        ResponseVO<String> responseVO = new ResponseVO<>();
-        responseVO.setSuccess(Boolean.FALSE);
-        responseVO.setRetCode(retCode);
-        responseVO.setRetInfo(retInfo);
-        return responseVO;
+        ResponseVO<String> result = new ResponseVO<>();
+        result.setSuccess(Boolean.FALSE);
+        result.setRetCode(retCode);
+        result.setRetInfo(retInfo);
+        return result;
     }
 
-    private static String defaultErrorMessage(String msg) {
-        return msg != null ? msg : "Server error";
+    public static ResponseVO<String> of(String retCode, String retInfo, String data) {
+        ResponseVO<String> result = of(retCode, retInfo);
+        result.setData(data);
+        return result;
+    }
+
+    private static String defaultErrorMessage(String message) {
+        return message != null ? message : "Server error";
     }
 
     @Data

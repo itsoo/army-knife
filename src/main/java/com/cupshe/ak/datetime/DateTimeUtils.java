@@ -1,4 +1,4 @@
-package com.cupshe.ak;
+package com.cupshe.ak.datetime;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
