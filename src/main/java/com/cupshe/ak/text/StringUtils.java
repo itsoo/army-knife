@@ -107,4 +107,30 @@ public class StringUtils {
         String afterDelimiter = toSplit.substring(offset + delimiter.length());
         return new String[]{beforeDelimiter, afterDelimiter};
     }
+
+    public static String upperFirstLetter(String str) {
+        char c = str.charAt(0);
+        if (needUpperFirstLetter(c)) {
+            c -= 32;
+        }
+
+        return c + (str.length() > 1 ? str.substring(1) : "");
+    }
+
+    public static String lowerFirstLetter(String str) {
+        char c = str.charAt(0);
+        if (needLowerFirstLetter(c)) {
+            c += 32;
+        }
+
+        return c + (str.length() > 1 ? str.substring(1) : "");
+    }
+
+    private static boolean needUpperFirstLetter(char c) {
+        return c >= 'a' && c <= 'z';
+    }
+
+    private static boolean needLowerFirstLetter(char c) {
+        return c >= 'A' && c <= 'Z';
+    }
 }

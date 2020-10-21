@@ -1,6 +1,7 @@
 package com.cupshe.ak.bean;
 
 import com.cupshe.ak.core.Kv;
+import com.cupshe.ak.text.StringUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -45,16 +46,16 @@ public class BeanUtils {
         }
     }
 
-    private static String getterMethodName(String fieldName) {
-        char c = fieldName.charAt(0);
-        if (needUpperFirstLetter(c)) {
-            c -= ('a' - 'A');
-        }
-
-        return "get" + c + (fieldName.length() > 1 ? fieldName.substring(1) : "");
+    public static String getterMethodName(String fieldName) {
+        return "get" + StringUtils.upperFirstLetter(fieldName);
     }
 
-    private static boolean needUpperFirstLetter(char c) {
-        return c >= 'a' && c <= 'z';
+    public static String getBeanName(String qualifier) {
+        String[] split = StringUtils.split(qualifier, ".");
+        if (split != null) {
+            return split[split.length - 1];
+        }
+
+        return null;
     }
 }
