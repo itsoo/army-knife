@@ -21,16 +21,13 @@ public class BeanUtils {
         }
 
         Field[] fields = obj.getClass().getDeclaredFields();
-        if (fields == null || fields.length == 0) {
+        if (fields.length == 0) {
             return Collections.emptyList();
         }
 
         List<Kv> result = new ArrayList<>();
         for (Field f : fields) {
-            Object value = getFieldValueByName(f.getName(), obj);
-            if (f.getName() != null) {
-                result.add(new Kv(f.getName(), value));
-            }
+            result.add(new Kv(f.getName(), getFieldValueByName(f.getName(), obj)));
         }
 
         return result;
@@ -51,11 +48,15 @@ public class BeanUtils {
     }
 
     public static String getBeanName(String qualifier) {
-        String[] split = StringUtils.split(qualifier, ".");
-        if (split != null) {
-            return split[split.length - 1];
+        if (qualifier == null) {
+            return null;
         }
 
-        return null;
+        int i = qualifier.lastIndexOf('.');
+        if (i < 0) {
+            return qualifier;
+        }
+
+        return StringUtils.lowerFirstLetter(qualifier.substring(i + 1));
     }
 }

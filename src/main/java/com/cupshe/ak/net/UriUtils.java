@@ -37,7 +37,7 @@ public class UriUtils {
             }
 
             String key = args.get(i).getKey();
-            if (StringUtils.isNotEmpty(key)) {
+            if (StringUtils.isNotBlank(key)) {
                 result.append(sp).append(key).append('=').append(encode(args.get(i).getValue()));
             }
         }
@@ -87,15 +87,17 @@ public class UriUtils {
     }
 
     public static String processParamsOfUri(String uri, String[] params) {
-        String[] reqParams = params.clone();
-        for (int i = 0; i < reqParams.length; i++) {
-            String[] kv = StringUtils.split(reqParams[i], "=");
+        // query params
+        String[] qps = params.clone();
+        for (int i = 0; i < qps.length; i++) {
+            String[] kv = StringUtils.split(qps[i], "=");
             if (kv != null) {
-                reqParams[i] = kv[0] + '=' + encode(kv[1]);
+                qps[i] = kv[0] + '=' + encode(kv[1]);
             }
         }
 
-        return uri + getQuerySeparator(uri) + String.join("&", reqParams);
+        String query = qps.length == 0 ? "" : getQuerySeparator(uri) + String.join("&", qps);
+        return uri + query;
     }
 
     public static char getQuerySeparator(String uri) {
