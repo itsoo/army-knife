@@ -58,7 +58,9 @@ public class TokenResolver implements HandlerMethodArgumentResolver {
         }
         String token = web.getHeader(TOKEN);
         if (token == null ) {
-            throw new BusinessException(NOTLOGIN.getErrCode(),NOTLOGIN.getErrorMessage());
+            //未登录用户，返回空对象，交给业务处理
+            return new CustomerInfoDto();
+            //throw new BusinessException(NOTLOGIN.getErrCode(),NOTLOGIN.getErrorMessage());
         }
         return JwtUtil.getCustomerFromToken(token);
     }
