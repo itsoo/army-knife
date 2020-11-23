@@ -1,5 +1,7 @@
 package com.cupshe.ak.text;
 
+import org.slf4j.helpers.MessageFormatter;
+
 /**
  * StringUtils
  *
@@ -176,6 +178,10 @@ public class StringUtils {
         }
 
         return count;
+    }
+
+    public static String getFormatString(String message, Object... args) {
+        return MessageFormatter.arrayFormat(message, args).getMessage();
     }
 
     private static boolean needUpperFirstLetter(char c) {
