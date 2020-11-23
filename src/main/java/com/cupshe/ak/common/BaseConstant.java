@@ -18,13 +18,4 @@ public class BaseConstant {
 
     /*** 身份认证字段 */
     public static final String AUTHORIZATION = "Authorization";
-
-    /*** 调用来源头部标识 */
-    public static final String CALL_SOURCE_KEY = "Call-Source";
-
-    /*** 调用来源头部标识 */
-    public static final String CALL_SOURCE_VALUE = "REST-CLIENT";
-
-    /*** HTTP 请求协议 */
-    public static final String PROTOCOL = "http://";
 }

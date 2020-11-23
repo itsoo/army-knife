@@ -7,6 +7,8 @@ package com.cupshe.ak.text;
  */
 public class StringUtils {
 
+    public static final String EMPTY = "";
+
     public static boolean isEmpty(CharSequence cs) {
         return cs == null || cs.length() == 0;
     }
@@ -24,11 +26,13 @@ public class StringUtils {
         if (cs == null || (strLen = cs.length()) == 0) {
             return true;
         }
+
         for (int i = 0; i < strLen; i++) {
             if (!Character.isWhitespace(cs.charAt(i))) {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -46,11 +50,19 @@ public class StringUtils {
     }
 
     public static String trimToEmpty(String str) {
-        return str == null ? "" : str.trim();
+        return str == null ? EMPTY : str.trim();
+    }
+
+    public static String getOrDefault(Object obj, Object defaultObj) {
+        return obj == null ? defaultObj.toString() : obj.toString();
+    }
+
+    public static String getOrEmpty(Object obj) {
+        return getOrDefault(obj.toString(), EMPTY);
     }
 
     public static String defaultString(String str) {
-        return defaultString(str, "");
+        return defaultString(str, EMPTY);
     }
 
     public static String defaultString(String str, String defaultStr) {
@@ -114,7 +126,7 @@ public class StringUtils {
             c -= 32;
         }
 
-        return c + (str.length() > 1 ? str.substring(1) : "");
+        return c + (str.length() > 1 ? str.substring(1) : EMPTY);
     }
 
     public static String lowerFirstLetter(String str) {
@@ -123,7 +135,47 @@ public class StringUtils {
             c += 32;
         }
 
-        return c + (str.length() > 1 ? str.substring(1) : "");
+        return c + (str.length() > 1 ? str.substring(1) : EMPTY);
+    }
+
+    public static String trimLeadingCharacter(String str, char leadingCharacter) {
+        if (isBlank(str)) {
+            return str;
+        }
+
+        StringBuilder sb = new StringBuilder(str);
+        while (sb.length() > 0 && sb.charAt(0) == leadingCharacter) {
+            sb.deleteCharAt(0);
+        }
+
+        return sb.toString();
+    }
+
+    public static String trimTrailingCharacter(String str, char trailingCharacter) {
+        if (isBlank(str)) {
+            return str;
+        }
+
+        StringBuilder sb = new StringBuilder(str);
+        while (sb.length() > 0 && sb.charAt(sb.length() - 1) == trailingCharacter) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
+
+        return sb.toString();
+    }
+
+    public static int findSubstringCountOf(String str, String sub) {
+        if (isBlank(str) || isBlank(sub)) {
+            return 0;
+        }
+
+        int count = 0, pos = 0, idx;
+        while ((idx = str.indexOf(sub, pos)) != -1) {
+            ++count;
+            pos = idx + sub.length();
+        }
+
+        return count;
     }
 
     private static boolean needUpperFirstLetter(char c) {
