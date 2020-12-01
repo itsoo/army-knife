@@ -1,5 +1,7 @@
 package com.cupshe.ak.exception;
 
+import lombok.SneakyThrows;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -10,11 +12,17 @@ import java.io.StringWriter;
  */
 public class ExceptionUtils {
 
+    @SneakyThrows
     public static String getStackTrace(Throwable throwable) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw, true);
         throwable.printStackTrace(pw);
-        return sw.getBuffer().toString();
+        try {
+            return sw.getBuffer().toString();
+        } finally {
+            pw.close();
+            sw.close();
+        }
     }
 
     public static <R> R rethrow(Throwable throwable) {

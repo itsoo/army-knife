@@ -52,6 +52,6 @@ public class JsonUtils {
             return TypeFactory.defaultInstance().constructParametricType(rowClass, javaTypes);
         }
 
-        return TypeFactory.defaultInstance().constructParametricType((Class) genericType, new JavaType[0]);
+        return TypeFactory.defaultInstance().constructParametricType((Class<?>) genericType, new JavaType[0]);
     }
 }

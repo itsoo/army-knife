@@ -94,8 +94,7 @@ public class HighlightRenders {
             StringBuilder result = new StringBuilder();
             Matcher m = PATTERN.matcher(content);
             int i = 0;
-            String c;
-            while (m.find()) {
+            for (String c; m.find(); ) {
                 c = m.group();
                 result.append(content, i, (i = m.start()));
                 if (isValuesContent(c)) {

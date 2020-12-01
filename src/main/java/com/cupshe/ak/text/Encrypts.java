@@ -49,7 +49,8 @@ public class Encrypts {
 
         try {
             MessageDigest message = MessageDigest.getInstance("MD5");
-            return String.format("%032x", new BigInteger(1, message.digest(content.getBytes(StandardCharsets.UTF_8))));
+            byte[] bytes = content.getBytes(StandardCharsets.UTF_8);
+            return String.format("%032x", new BigInteger(1, message.digest(bytes)));
         } catch (GeneralSecurityException e) {
             throw new RuntimeException(e);
         }
@@ -93,9 +94,9 @@ public class Encrypts {
 
     private Cipher getCipher(int mode) {
         try {
-            KeyGenerator keygen = KeyGenerator.getInstance("AES");
-            keygen.init(128, new SecureRandom((rules.getBytes(StandardCharsets.UTF_8))));
-            SecretKey originalKey = keygen.generateKey();
+            KeyGenerator kg = KeyGenerator.getInstance("AES");
+            kg.init(128, new SecureRandom((rules.getBytes(StandardCharsets.UTF_8))));
+            SecretKey originalKey = kg.generateKey();
             byte[] raw = originalKey.getEncoded();
             SecretKey key = new SecretKeySpec(raw, "AES");
             Cipher cipher = Cipher.getInstance("AES");
