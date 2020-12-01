@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.cupshe.ak.common.AutoTraceIdConfig
+  com.cupshe.ak.common.AutoRequestCachedConfig
