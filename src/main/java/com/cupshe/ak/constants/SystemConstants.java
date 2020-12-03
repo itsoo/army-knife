@@ -28,4 +28,9 @@ public class SystemConstants {
      * 请求header中token的key
      */
     public static final  String TOKEN = "token";
+
+    /**
+     * 用户token信息中获取用户名的key
+     */
+    public static final  String CUSTOMERNAME = "customerName";
 }

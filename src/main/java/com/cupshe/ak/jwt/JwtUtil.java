@@ -14,9 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.cupshe.ak.constants.SystemConstants.CUSTOMEREMAIL;
-import static com.cupshe.ak.constants.SystemConstants.CUSTOMERID;
-import static com.cupshe.ak.constants.SystemConstants.CUSTOMERLOGINSTATUS;
+import static com.cupshe.ak.constants.SystemConstants.*;
 import static com.cupshe.ak.enums.ExceptionEnums.TOKENERROR;
 import static com.cupshe.ak.enums.ExceptionEnums.TOKENEXPIRED;
 
@@ -54,7 +52,7 @@ public class JwtUtil {
         }
         Map<String, Claim> map = jwt.getClaims();
         CustomerInfoDto customerInfoDto = new CustomerInfoDto();
-        if( !map.containsKey(CUSTOMERID) || !map.containsKey(CUSTOMEREMAIL) || !map.containsKey(CUSTOMERLOGINSTATUS)){
+        if( !map.containsKey(CUSTOMERID) || !map.containsKey(CUSTOMEREMAIL) || !map.containsKey(CUSTOMERLOGINSTATUS) || !map.containsKey(CUSTOMERNAME)){
             //如果token信息缺少key，抛异常
             throw new BusinessException(TOKENERROR.getErrCode() ,TOKENERROR.getErrorMessage()) ;
         }
@@ -62,6 +60,7 @@ public class JwtUtil {
         customerInfoDto.setCustomerId(map.get(CUSTOMERID).asLong());
         customerInfoDto.setLoginStatus(map.get(CUSTOMERLOGINSTATUS).asInt());
         customerInfoDto.setEmail(map.get(CUSTOMEREMAIL).asString());
+        customerInfoDto.setCustomerName(map.get(CUSTOMERNAME).asString());
         return customerInfoDto ;
     }
 }

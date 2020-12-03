@@ -25,4 +25,9 @@ public class CustomerInfoDto {
      * 用户登录状态0-未登录 1-登录
      */
     private Integer loginStatus ;
+
+    /**
+     * 用户名
+     */
+    private String customerName ;
 }
