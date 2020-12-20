@@ -3,6 +3,7 @@ package com.cupshe.ak.request;
 import com.cupshe.ak.dto.CustomerInfoDto;
 import com.cupshe.ak.exception.BusinessException;
 import com.cupshe.ak.jwt.JwtUtil;
+import com.cupshe.ak.text.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -57,7 +58,7 @@ public class TokenResolver implements HandlerMethodArgumentResolver {
             return null;
         }
         String token = web.getHeader(TOKEN);
-        if (token == null ) {
+        if (StringUtils.isBlank(token)) {
             //未登录用户，返回空对象，交给业务处理
             return new CustomerInfoDto();
             //throw new BusinessException(NOTLOGIN.getErrCode(),NOTLOGIN.getErrorMessage());
