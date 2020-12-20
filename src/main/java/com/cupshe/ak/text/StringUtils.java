@@ -42,6 +42,14 @@ public class StringUtils {
         return !isBlank(cs);
     }
 
+    public static boolean isEquals(String str, String tar) {
+        return str != null && str.equals(tar);
+    }
+
+    public static boolean isNotEquals(String str, String tar) {
+        return !isEquals(str, tar);
+    }
+
     public static String trim(String str) {
         return str == null ? null : str.trim();
     }
