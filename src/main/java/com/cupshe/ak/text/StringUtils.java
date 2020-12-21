@@ -103,11 +103,11 @@ public class StringUtils {
         }
 
         StringBuilder result = new StringBuilder(capacity);
-        int j = 0, length = oldPattern.length();
+        int j = 0;
         while (i >= 0) {
             result.append(str, j, i);
             result.append(newPattern);
-            j = i + length;
+            j = i + oldPattern.length();
             i = str.indexOf(oldPattern, j);
         }
 
