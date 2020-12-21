@@ -131,6 +131,10 @@ public class StringUtils {
     }
 
     public static String upperFirstLetter(String str) {
+        if (isBlank(str)) {
+            return str;
+        }
+
         char c = str.charAt(0);
         if (needUpperFirstLetter(c)) {
             c -= 32;
@@ -140,6 +144,10 @@ public class StringUtils {
     }
 
     public static String lowerFirstLetter(String str) {
+        if (isBlank(str)) {
+            return str;
+        }
+
         char c = str.charAt(0);
         if (needLowerFirstLetter(c)) {
             c += 32;
@@ -148,30 +156,34 @@ public class StringUtils {
         return c + (str.length() > 1 ? str.substring(1) : EMPTY);
     }
 
-    public static String trimLeadingCharacter(String str, char character) {
-        if (isBlank(str)) {
-            return str;
+    public static String trimLeadingCharacter(String str, char c) {
+        if (str == null) {
+            return null;
         }
 
-        StringBuilder sbr = new StringBuilder(str);
-        while (sbr.length() > 0 && sbr.charAt(0) == character) {
-            sbr.deleteCharAt(0);
+        int i = 0;
+        for (; i < str.length(); i++) {
+            if (str.charAt(i) != c) {
+                break;
+            }
         }
 
-        return sbr.toString();
+        return str.substring(i);
     }
 
-    public static String trimTrailingCharacter(String str, char character) {
-        if (isBlank(str)) {
-            return str;
+    public static String trimTrailingCharacter(String str, char c) {
+        if (str == null) {
+            return null;
         }
 
-        StringBuilder sbr = new StringBuilder(str);
-        while (sbr.length() > 0 && sbr.charAt(sbr.length() - 1) == character) {
-            sbr.deleteCharAt(sbr.length() - 1);
+        int i = str.length() - 1;
+        for (; i >= 0; i--) {
+            if (str.charAt(i) != c) {
+                break;
+            }
         }
 
-        return sbr.toString();
+        return str.substring(0, i + 1);
     }
 
     public static int findSubstringCountOf(String str, String subStr) {
