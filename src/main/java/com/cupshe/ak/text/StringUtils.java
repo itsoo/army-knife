@@ -92,8 +92,8 @@ public class StringUtils {
             return str;
         }
 
-        int index = str.indexOf(oldPattern);
-        if (index == -1) {
+        int i = str.indexOf(oldPattern);
+        if (i == -1) {
             return str;
         }
 
@@ -103,15 +103,15 @@ public class StringUtils {
         }
 
         StringBuilder result = new StringBuilder(capacity);
-        int pos = 0, patLen = oldPattern.length();
-        while (index >= 0) {
-            result.append(str, pos, index);
+        int j = 0, length = oldPattern.length();
+        while (i >= 0) {
+            result.append(str, j, i);
             result.append(newPattern);
-            pos = index + patLen;
-            index = str.indexOf(oldPattern, pos);
+            j = i + length;
+            i = str.indexOf(oldPattern, j);
         }
 
-        result.append(str.substring(pos));
+        result.append(str.substring(j));
         return result.toString();
     }
 
@@ -120,14 +120,14 @@ public class StringUtils {
             return null;
         }
 
-        int offset = str.indexOf(delimiter);
-        if (offset < 0) {
+        int i = str.indexOf(delimiter);
+        if (i < 0) {
             return null;
         }
 
-        String beforeDelimiter = str.substring(0, offset);
-        String afterDelimiter = str.substring(offset + delimiter.length());
-        return new String[]{beforeDelimiter, afterDelimiter};
+        String s0 = str.substring(0, i);
+        String s1 = str.substring(i + delimiter.length());
+        return new String[]{s0, s1};
     }
 
     public static String upperFirstLetter(String str) {
@@ -153,12 +153,12 @@ public class StringUtils {
             return str;
         }
 
-        StringBuilder sb = new StringBuilder(str);
-        while (sb.length() > 0 && sb.charAt(0) == character) {
-            sb.deleteCharAt(0);
+        StringBuilder sbr = new StringBuilder(str);
+        while (sbr.length() > 0 && sbr.charAt(0) == character) {
+            sbr.deleteCharAt(0);
         }
 
-        return sb.toString();
+        return sbr.toString();
     }
 
     public static String trimTrailingCharacter(String str, char character) {
@@ -166,12 +166,12 @@ public class StringUtils {
             return str;
         }
 
-        StringBuilder sb = new StringBuilder(str);
-        while (sb.length() > 0 && sb.charAt(sb.length() - 1) == character) {
-            sb.deleteCharAt(sb.length() - 1);
+        StringBuilder sbr = new StringBuilder(str);
+        while (sbr.length() > 0 && sbr.charAt(sbr.length() - 1) == character) {
+            sbr.deleteCharAt(sbr.length() - 1);
         }
 
-        return sb.toString();
+        return sbr.toString();
     }
 
     public static int findSubstringCountOf(String str, String subStr) {
@@ -179,10 +179,10 @@ public class StringUtils {
             return 0;
         }
 
-        int count = 0, pos = 0, idx;
-        while ((idx = str.indexOf(subStr, pos)) != -1) {
+        int count = 0, j = 0, i;
+        while ((i = str.indexOf(subStr, j)) != -1) {
             ++count;
-            pos = idx + subStr.length();
+            j = i + subStr.length();
         }
 
         return count;
