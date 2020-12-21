@@ -87,17 +87,17 @@ public class StringUtils {
         return isEmpty(str) ? defaultStr : str;
     }
 
-    public static String replace(String inString, String oldPattern, String newPattern) {
-        if (isEmpty(inString) || isEmpty(oldPattern) || newPattern == null) {
-            return inString;
+    public static String replace(String str, String oldPattern, String newPattern) {
+        if (isEmpty(str) || isEmpty(oldPattern) || newPattern == null) {
+            return str;
         }
 
-        int index = inString.indexOf(oldPattern);
+        int index = str.indexOf(oldPattern);
         if (index == -1) {
-            return inString;
+            return str;
         }
 
-        int capacity = inString.length();
+        int capacity = str.length();
         if (newPattern.length() > oldPattern.length()) {
             capacity += 16;
         }
@@ -105,28 +105,28 @@ public class StringUtils {
         StringBuilder result = new StringBuilder(capacity);
         int pos = 0, patLen = oldPattern.length();
         while (index >= 0) {
-            result.append(inString, pos, index);
+            result.append(str, pos, index);
             result.append(newPattern);
             pos = index + patLen;
-            index = inString.indexOf(oldPattern, pos);
+            index = str.indexOf(oldPattern, pos);
         }
 
-        result.append(inString.substring(pos));
+        result.append(str.substring(pos));
         return result.toString();
     }
 
-    public static String[] split(String toSplit, String delimiter) {
-        if (isEmpty(toSplit) || isEmpty(delimiter)) {
+    public static String[] split(String str, String delimiter) {
+        if (isEmpty(str) || isEmpty(delimiter)) {
             return null;
         }
 
-        int offset = toSplit.indexOf(delimiter);
+        int offset = str.indexOf(delimiter);
         if (offset < 0) {
             return null;
         }
 
-        String beforeDelimiter = toSplit.substring(0, offset);
-        String afterDelimiter = toSplit.substring(offset + delimiter.length());
+        String beforeDelimiter = str.substring(0, offset);
+        String afterDelimiter = str.substring(offset + delimiter.length());
         return new String[]{beforeDelimiter, afterDelimiter};
     }
 
@@ -148,41 +148,41 @@ public class StringUtils {
         return c + (str.length() > 1 ? str.substring(1) : EMPTY);
     }
 
-    public static String trimLeadingCharacter(String str, char leadingCharacter) {
+    public static String trimLeadingCharacter(String str, char character) {
         if (isBlank(str)) {
             return str;
         }
 
         StringBuilder sb = new StringBuilder(str);
-        while (sb.length() > 0 && sb.charAt(0) == leadingCharacter) {
+        while (sb.length() > 0 && sb.charAt(0) == character) {
             sb.deleteCharAt(0);
         }
 
         return sb.toString();
     }
 
-    public static String trimTrailingCharacter(String str, char trailingCharacter) {
+    public static String trimTrailingCharacter(String str, char character) {
         if (isBlank(str)) {
             return str;
         }
 
         StringBuilder sb = new StringBuilder(str);
-        while (sb.length() > 0 && sb.charAt(sb.length() - 1) == trailingCharacter) {
+        while (sb.length() > 0 && sb.charAt(sb.length() - 1) == character) {
             sb.deleteCharAt(sb.length() - 1);
         }
 
         return sb.toString();
     }
 
-    public static int findSubstringCountOf(String str, String sub) {
-        if (isBlank(str) || isBlank(sub)) {
+    public static int findSubstringCountOf(String str, String subStr) {
+        if (isBlank(str) || isBlank(subStr)) {
             return 0;
         }
 
         int count = 0, pos = 0, idx;
-        while ((idx = str.indexOf(sub, pos)) != -1) {
+        while ((idx = str.indexOf(subStr, pos)) != -1) {
             ++count;
-            pos = idx + sub.length();
+            pos = idx + subStr.length();
         }
 
         return count;
