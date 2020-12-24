@@ -3,8 +3,10 @@ package com.cupshe.ak.request;
 import com.cupshe.ak.common.BaseConstant;
 import com.cupshe.ak.core.Kv;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -21,7 +23,9 @@ public class RequestParameterUtils {
 
     public static List<Kv> getParams() {
         Map<String, String[]> store = BaseConstant.REQ_PARAMS_STORE.get();
-        return store.entrySet()
+        return Optional.ofNullable(store)
+                .orElse(Collections.emptyMap())
+                .entrySet()
                 .parallelStream()
                 .map(t -> new Kv(t.getKey(), t.getValue()))
                 .collect(Collectors.toList());
