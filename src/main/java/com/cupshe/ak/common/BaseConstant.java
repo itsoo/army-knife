@@ -1,8 +1,6 @@
 package com.cupshe.ak.common;
 
-import com.cupshe.ak.core.Kv;
-
-import java.util.List;
+import java.util.Map;
 
 /**
  * BaseConstant
@@ -12,14 +10,19 @@ import java.util.List;
 public class BaseConstant {
 
     /**
-     * trace-id store
+     * request trace-id store
      */
-    public static final InheritableThreadLocal<String> TRACE_ID_STORE = new InheritableThreadLocal<>();
+    public static final InheritableThreadLocal<String> REQ_TRACE_ID_STORE = new InheritableThreadLocal<>();
 
     /**
      * request headers store
      */
-    public static final InheritableThreadLocal<List<Kv>> REQ_HEADERS_STORE = new InheritableThreadLocal<>();
+    public static final InheritableThreadLocal<Map<String, String>> REQ_HEADERS_STORE = new InheritableThreadLocal<>();
+
+    /**
+     * request params store
+     */
+    public static final InheritableThreadLocal<Map<String, String[]>> REQ_PARAMS_STORE = new InheritableThreadLocal<>();
 
     /**
      * trace-id key
@@ -27,7 +30,7 @@ public class BaseConstant {
     public static final String TRACE_ID_KEY = "Trace-ID";
 
     /**
-     * session-id
+     * session-id key
      */
     public static final String SESSION_KEY = "JSESSIONID";
 
