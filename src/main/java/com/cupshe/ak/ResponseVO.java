@@ -61,12 +61,24 @@ public class ResponseVO<T> implements Serializable {
         return result;
     }
 
+    public static ResponseVO<String> of(Boolean success, String retCode, String retInfo) {
+        ResponseVO<String> result = of(retCode, retInfo);
+        result.setSuccess(success);
+        return result;
+    }
+
     public static <T> ResponseVO<T> of(String retCode, String retInfo, T data) {
         ResponseVO<T> result = new ResponseVO<>();
         result.setSuccess(Boolean.FALSE);
         result.setRetCode(retCode);
         result.setRetInfo(retInfo);
         result.setData(data);
+        return result;
+    }
+
+    public static <T> ResponseVO<T> of(Boolean success, String retCode, String retInfo, T data) {
+        ResponseVO<T> result = of(retCode, retInfo, data);
+        result.setSuccess(success);
         return result;
     }
 
