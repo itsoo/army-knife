@@ -4,7 +4,6 @@ import com.cupshe.ak.net.TraceIdUtils;
 import com.cupshe.ak.request.RequestHeaderUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -40,8 +39,8 @@ public class AutoRequestCachedConfig implements WebMvcConfigurer {
         }
 
         @Override
-        public void postHandle(
-                HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView mv) {
+        public void afterCompletion(
+                HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
 
             REQ_TRACE_ID_STORE.remove();
             REQ_HEADERS_STORE.remove();
