@@ -1,7 +1,11 @@
 package com.cupshe.ak;
 
+import com.cupshe.ak.io.IoUtils;
+import com.cupshe.ak.json.JsonUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.Data;
 
+import javax.servlet.ServletOutputStream;
 import java.io.Serializable;
 import java.util.List;
 
@@ -64,6 +68,19 @@ public class ResponseVO<T> implements Serializable {
         result.setRetInfo(retInfo);
         result.setData(data);
         return result;
+    }
+
+    public static void write(ServletOutputStream os, Exception e) {
+        ResponseVO<?> vo = of(e);
+        String result;
+
+        try {
+            result = JsonUtils.objectToJson(vo);
+        } catch (JsonProcessingException ignore) {
+            return;
+        }
+
+        IoUtils.write(os, result);
     }
 
     private static String defaultErrorMessage(String message) {
