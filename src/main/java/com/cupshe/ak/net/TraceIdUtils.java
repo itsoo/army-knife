@@ -3,6 +3,7 @@ package com.cupshe.ak.net;
 import com.cupshe.ak.common.BaseConstant;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 /**
  * TraceIdUtils
@@ -16,6 +17,7 @@ public class TraceIdUtils {
     }
 
     public static String getTraceId(HttpServletRequest req) {
-        return req.getHeader(BaseConstant.TRACE_ID_KEY);
+        return Optional.ofNullable(req.getHeader(BaseConstant.TRACE_ID_KEY))
+                .orElse(getTraceId());
     }
 }
