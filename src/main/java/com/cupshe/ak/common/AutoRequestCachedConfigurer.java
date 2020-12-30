@@ -1,7 +1,7 @@
 package com.cupshe.ak.common;
 
-import com.cupshe.ak.net.TraceIdUtils;
 import com.cupshe.ak.request.RequestHeaderUtils;
+import com.cupshe.ak.request.RequestTraceIdUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.core.Ordered;
@@ -29,7 +29,7 @@ public class AutoRequestCachedConfigurer implements Filter {
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
             throws IOException, ServletException {
 
-        REQ_TRACE_ID_STORE.set(TraceIdUtils.getTraceId((HttpServletRequest) req));
+        REQ_TRACE_ID_STORE.set(RequestTraceIdUtils.genericTraceId((HttpServletRequest) req));
         REQ_HEADERS_STORE.set(RequestHeaderUtils.getRequestHeaders((HttpServletRequest) req));
         REQ_PARAMS_STORE.set(req.getParameterMap());
         chain.doFilter(req, resp);

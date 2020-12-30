@@ -9,7 +9,9 @@ import java.util.Optional;
  * TraceIdUtils
  *
  * @author zxy
+ * @see com.cupshe.ak.request.RequestTraceIdUtils
  */
+@Deprecated
 public class TraceIdUtils {
 
     public static String getTraceId() {
