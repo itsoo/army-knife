@@ -1,31 +1,25 @@
 package com.cupshe.ak.net;
 
 import com.cupshe.ak.common.BaseConstant;
-import com.cupshe.ak.text.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 /**
  * TraceIdUtils
  *
  * @author zxy
+ * @see com.cupshe.ak.request.RequestTraceIdUtils
  */
+@Deprecated
 public class TraceIdUtils {
 
     public static String getTraceId() {
-        try {
-            return BaseConstant.TRACE_ID_STORE.get();
-        } finally {
-            BaseConstant.TRACE_ID_STORE.remove();
-        }
+        return BaseConstant.REQ_TRACE_ID_STORE.get();
     }
 
     public static String getTraceId(HttpServletRequest req) {
-        String result = req.getHeader(BaseConstant.TRACE_ID_KEY);
-        if (StringUtils.isEmpty(result)) {
-            return getTraceId();
-        }
-
-        return result;
+        return Optional.ofNullable(req.getHeader(BaseConstant.TRACE_ID_KEY))
+                .orElse(getTraceId());
     }
 }

@@ -134,4 +134,21 @@ public class DateTimeUtils {
     public static LocalDateTime asLocalDateTime(Date date) {
         return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
+    
+    public static Date asDate(LocalDate localDate,String zone) {
+        return Date.from(localDate.atStartOfDay().atZone(ZoneId.of(zone)).toInstant());
+    }
+
+    public static Date asDate(LocalDateTime localDateTime,String zone) {
+        return Date.from(localDateTime.atZone(ZoneId.of(zone)).toInstant());
+    }
+
+    public static LocalDate asLocalDate(Date date,String zone) {
+        return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.of(zone)).toLocalDate();
+    }
+
+    public static LocalDateTime asLocalDateTime(Date date,String zone) {
+        return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.of(zone)).toLocalDateTime();
+    }
+    
 }

@@ -1,6 +1,5 @@
 package com.cupshe.ak.core;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
@@ -9,7 +8,6 @@ import lombok.Getter;
  * @author zxy
  */
 @Getter
-@AllArgsConstructor
 public class Kv {
 
     /*** KEY */
@@ -17,6 +15,25 @@ public class Kv {
 
     /*** VALUE */
     private final Object value;
+
+    private Kv next;
+
+    private Kv() {
+        this(null, null);
+    }
+
+    public Kv(String key, Object value) {
+        this.key = key;
+        this.value = value;
+    }
+
+    public static Kv empty() {
+        return new Kv();
+    }
+
+    public void setNext(Kv next) {
+        this.next = next;
+    }
 
     @Override
     public String toString() {
