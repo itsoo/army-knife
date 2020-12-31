@@ -2,19 +2,23 @@ package com.cupshe.ak;
 
 import com.cupshe.ak.io.IoUtils;
 import com.cupshe.ak.json.JsonUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.Data;
+import lombok.SneakyThrows;
 
 import javax.servlet.ServletOutputStream;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @author wangjia
  */
 @Data
 public class ResponseVO<T> implements Serializable {
+
     private static final long serialVersionUID = 8780569239140576438L;
+
+    private static final String SUCCESS_RET_CODE = "000000";
+    private static final String SUCCESS_RET_INFO = "success";
 
     private Boolean success;
     private Long timeStamp;
@@ -23,76 +27,73 @@ public class ResponseVO<T> implements Serializable {
     private T data;
 
     private ResponseVO() {
-        this.setSuccess(Boolean.TRUE);
         this.setTimeStamp(System.currentTimeMillis());
-        this.setRetCode("000000");
-        this.setRetInfo("success");
     }
 
     public static ResponseVO<Object> of() {
-        return new ResponseVO<>();
-    }
-
-    public static <T> ResponseVO<T> of(T data) {
-        ResponseVO<T> result = new ResponseVO<>();
-        result.setData(data);
-        return result;
-    }
-
-    public static <T> ResponseVO<RetData<T>> of(List<T> list) {
-        ResponseVO<RetData<T>> result = new ResponseVO<>();
-        result.setData(RetData.of(list));
-        return result;
-    }
-
-    public static ResponseVO<Exception> of(Exception e) {
-        ResponseVO<Exception> result = new ResponseVO<>();
-        result.setSuccess(Boolean.FALSE);
-        result.setRetCode("000001");
-        result.setRetInfo(defaultErrorMessage(e.getMessage()));
-        return result;
+        return of(Boolean.TRUE, SUCCESS_RET_CODE, SUCCESS_RET_INFO, null);
     }
 
     public static ResponseVO<String> of(String retCode, String retInfo) {
-        ResponseVO<String> result = new ResponseVO<>();
-        result.setSuccess(Boolean.FALSE);
-        result.setRetCode(retCode);
-        result.setRetInfo(retInfo);
-        return result;
+        return of(Boolean.FALSE, retCode, retInfo, null);
     }
 
     public static ResponseVO<String> of(Boolean success, String retCode, String retInfo) {
-        ResponseVO<String> result = of(retCode, retInfo);
-        result.setSuccess(success);
-        return result;
+        return of(success, retCode, retInfo, null);
+    }
+
+    public static <T> ResponseVO<RetData<T>> of(Boolean success, Collection<T> data) {
+        return of(success, SUCCESS_RET_CODE, SUCCESS_RET_INFO, RetData.of(data));
+    }
+
+    public static <T> ResponseVO<RetData<T>> of(Collection<T> data) {
+        return of(Boolean.TRUE, SUCCESS_RET_CODE, SUCCESS_RET_INFO, RetData.of(data));
+    }
+
+    public static <T> ResponseVO<RetData<T>> of(String retCode, String retInfo, Collection<T> data) {
+        return of(Boolean.FALSE, retCode, retInfo, RetData.of(data));
+    }
+
+    public static ResponseVO<Exception> of(Exception e) {
+        return of(Boolean.FALSE, "000001", defaultErrorMessage(e.getMessage()), null);
+    }
+
+    public static ResponseVO<Exception> of(Boolean success, Exception e) {
+        return of(success, "000001", defaultErrorMessage(e.getMessage()), null);
+    }
+
+    public static ResponseVO<Exception> of(String retCode, Exception e) {
+        return of(Boolean.FALSE, retCode, defaultErrorMessage(e.getMessage()), null);
+    }
+
+    public static ResponseVO<Exception> of(Boolean success, String retCode, Exception e) {
+        return of(success, retCode, defaultErrorMessage(e.getMessage()), null);
     }
 
     public static <T> ResponseVO<T> of(String retCode, String retInfo, T data) {
+        return of(Boolean.FALSE, retCode, retInfo, data);
+    }
+
+    public static <T> ResponseVO<T> of(T data) {
+        return of(Boolean.TRUE, SUCCESS_RET_CODE, SUCCESS_RET_INFO, data);
+    }
+
+    public static <T> ResponseVO<T> of(Boolean success, T data) {
+        return of(success, SUCCESS_RET_CODE, SUCCESS_RET_INFO, data);
+    }
+
+    public static <T> ResponseVO<T> of(Boolean success, String retCode, String retInfo, T data) {
         ResponseVO<T> result = new ResponseVO<>();
-        result.setSuccess(Boolean.FALSE);
+        result.setSuccess(success);
         result.setRetCode(retCode);
         result.setRetInfo(retInfo);
         result.setData(data);
         return result;
     }
 
-    public static <T> ResponseVO<T> of(Boolean success, String retCode, String retInfo, T data) {
-        ResponseVO<T> result = of(retCode, retInfo, data);
-        result.setSuccess(success);
-        return result;
-    }
-
+    @SneakyThrows
     public static void write(ServletOutputStream os, Exception e) {
-        ResponseVO<?> vo = of(e);
-        String result;
-
-        try {
-            result = JsonUtils.objectToJson(vo);
-        } catch (JsonProcessingException ignore) {
-            return;
-        }
-
-        IoUtils.write(os, result);
+        IoUtils.write(os, JsonUtils.objectToJson(of(e)));
     }
 
     private static String defaultErrorMessage(String message) {
@@ -101,9 +102,10 @@ public class ResponseVO<T> implements Serializable {
 
     @Data
     public static class RetData<T> {
-        private List<T> list;
 
-        static <T> RetData<T> of(List<T> list) {
+        private Collection<T> list;
+
+        static <T> RetData<T> of(Collection<T> list) {
             RetData<T> result = new RetData<>();
             result.setList(list);
             return result;
