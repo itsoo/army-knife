@@ -10,8 +10,6 @@ import lombok.Getter;
 @Getter
 public class Kv {
 
-    public static final Kv EMPTY = new Kv();
-
     /*** KEY */
     private final String key;
 
@@ -27,6 +25,10 @@ public class Kv {
     public Kv(String key, Object value) {
         this.key = key;
         this.value = value;
+    }
+
+    public static Kv empty() {
+        return new Kv();
     }
 
     public void setNext(Kv next) {

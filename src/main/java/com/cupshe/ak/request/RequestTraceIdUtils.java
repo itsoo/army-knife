@@ -36,10 +36,7 @@ public class RequestTraceIdUtils {
     }
 
     public static String getTraceId(HttpServletRequest req) {
-        String traceId = req.getHeader(TRACE_ID_KEY);
-        return StringUtils.isNotBlank(traceId)
-                ? traceId
-                : getTraceId();
+        return StringUtils.defaultIfBlank(req.getHeader(TRACE_ID_KEY), getTraceId());
     }
 
     public static void setTraceId(String traceId) {

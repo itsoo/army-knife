@@ -12,14 +12,17 @@ import java.util.StringJoiner;
  */
 public class Kvs implements Iterable<Kv> {
 
-    public static final Kvs EMPTY = new Kvs();
+    /**
+     * Empty Kvs
+     */
+    public static final Kvs EMPTY = new EmptyKvs();
 
     private final Kv head;
     private Kv curr;
     private int size;
 
     public Kvs() {
-        head = Kv.EMPTY;
+        head = Kv.empty();
         curr = head;
         size = 0;
     }
@@ -31,7 +34,7 @@ public class Kvs implements Iterable<Kv> {
     public void add(Kv kv) {
         curr.setNext(kv);
         curr = curr.getNext();
-        size++;
+        ++size;
     }
 
     public void addAll(Kvs kvs) {
@@ -65,11 +68,11 @@ public class Kvs implements Iterable<Kv> {
     /**
      * Iterator
      */
-    public final class Itr implements Iterator<Kv> {
+    public class Itr implements Iterator<Kv> {
 
         private Kv _curr;
 
-        Itr() {
+        public Itr() {
             _curr = head;
         }
 
@@ -81,6 +84,51 @@ public class Kvs implements Iterable<Kv> {
         @Override
         public Kv next() {
             return _curr = _curr.getNext();
+        }
+    }
+
+    /**
+     * EmptyKvs
+     */
+    private static class EmptyKvs extends Kvs {
+
+        @Override
+        public void add(Kv kv) {
+            //---------------------
+            // EMPTY BODY
+            //---------------------
+        }
+
+        @Override
+        public void addAll(Kvs kvs) {
+            //---------------------
+            // EMPTY BODY
+            //---------------------
+        }
+
+        @Override
+        public int size() {
+            return 0;
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return true;
+        }
+
+        @Override
+        public Iterator<Kv> iterator() {
+            return new Itr() {
+                @Override
+                public boolean hasNext() {
+                    return false;
+                }
+
+                @Override
+                public Kv next() {
+                    return null;
+                }
+            };
         }
     }
 }

@@ -2,12 +2,11 @@ package com.cupshe.ak.request;
 
 import com.cupshe.ak.common.BaseConstant;
 import com.cupshe.ak.core.Kv;
+import com.cupshe.ak.core.Kvs;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * RequestParameterUtils
@@ -21,13 +20,12 @@ public class RequestParameterUtils {
         return store != null ? store.get(key) : null;
     }
 
-    public static List<Kv> getParams() {
+    public static Kvs getParams() {
+        Kvs result = new Kvs();
         Map<String, String[]> store = BaseConstant.REQ_PARAMS_STORE.get();
-        return Optional.ofNullable(store)
+        Optional.ofNullable(store)
                 .orElse(Collections.emptyMap())
-                .entrySet()
-                .parallelStream()
-                .map(t -> new Kv(t.getKey(), t.getValue()))
-                .collect(Collectors.toList());
+                .forEach((key, value) -> result.add(new Kv(key, value)));
+        return result;
     }
 }

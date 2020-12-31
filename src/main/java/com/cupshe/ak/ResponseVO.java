@@ -2,12 +2,12 @@ package com.cupshe.ak;
 
 import com.cupshe.ak.io.IoUtils;
 import com.cupshe.ak.json.JsonUtils;
+import com.cupshe.ak.text.StringUtils;
 import lombok.Data;
 import lombok.SneakyThrows;
 
 import javax.servlet.ServletOutputStream;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -17,6 +17,10 @@ import java.util.List;
 public class ResponseVO<T> implements Serializable {
 
     private static final long serialVersionUID = 8780569239140576438L;
+
+    public static final String ERR_0001_RET_CODE = "000001";
+    public static final String ERR_0002_RET_CODE = "000002";
+    public static final String ERR_0003_RET_CODE = "000003";
 
     private static final String SUCCESS_RET_CODE = "000000";
     private static final String SUCCESS_RET_INFO = "success";
@@ -44,7 +48,7 @@ public class ResponseVO<T> implements Serializable {
     }
 
     public static <T> ResponseVO<RetData<T>> of(Boolean success, List<T> list) {
-        return of(success, SUCCESS_RET_CODE, SUCCESS_RET_INFO, RetData.of(list));
+        return of(success, defaultErrorCode(success), StringUtils.EMPTY, RetData.of(list));
     }
 
     public static <T> ResponseVO<RetData<T>> of(List<T> list) {
@@ -56,11 +60,11 @@ public class ResponseVO<T> implements Serializable {
     }
 
     public static ResponseVO<Exception> of(Exception e) {
-        return of(Boolean.FALSE, "000001", defaultErrorMessage(e.getMessage()), null);
+        return of(Boolean.FALSE, ERR_0001_RET_CODE, defaultErrorMessage(e.getMessage()), null);
     }
 
     public static ResponseVO<Exception> of(Boolean success, Exception e) {
-        return of(success, "000001", defaultErrorMessage(e.getMessage()), null);
+        return of(success, ERR_0001_RET_CODE, defaultErrorMessage(e.getMessage()), null);
     }
 
     public static ResponseVO<Exception> of(String retCode, Exception e) {
@@ -71,12 +75,12 @@ public class ResponseVO<T> implements Serializable {
         return of(success, retCode, defaultErrorMessage(e.getMessage()), null);
     }
 
-    public static <T> ResponseVO<T> of(String retCode, String retInfo, T data) {
-        return of(Boolean.FALSE, retCode, retInfo, data);
-    }
-
     public static <T> ResponseVO<T> of(T data) {
         return of(Boolean.TRUE, SUCCESS_RET_CODE, SUCCESS_RET_INFO, data);
+    }
+
+    public static <T> ResponseVO<T> of(String retCode, String retInfo, T data) {
+        return of(Boolean.FALSE, retCode, retInfo, data);
     }
 
     public static <T> ResponseVO<T> of(Boolean success, T data) {
@@ -97,8 +101,12 @@ public class ResponseVO<T> implements Serializable {
         IoUtils.write(os, JsonUtils.objectToJson(of(e)));
     }
 
+    private static String defaultErrorCode(Boolean success) {
+        return Boolean.TRUE.equals(success) ? SUCCESS_RET_CODE : ERR_0001_RET_CODE;
+    }
+
     private static String defaultErrorMessage(String message) {
-        return message != null ? message : "Server error";
+        return StringUtils.defaultIfBlank(message, "Server error");
     }
 
     @Data
