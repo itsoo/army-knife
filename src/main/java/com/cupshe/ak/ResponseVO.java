@@ -8,6 +8,7 @@ import lombok.SneakyThrows;
 import javax.servlet.ServletOutputStream;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author wangjia
@@ -42,16 +43,16 @@ public class ResponseVO<T> implements Serializable {
         return of(success, retCode, retInfo, null);
     }
 
-    public static <T> ResponseVO<RetData<T>> of(Boolean success, Collection<T> data) {
-        return of(success, SUCCESS_RET_CODE, SUCCESS_RET_INFO, RetData.of(data));
+    public static <T> ResponseVO<RetData<T>> of(Boolean success, List<T> list) {
+        return of(success, SUCCESS_RET_CODE, SUCCESS_RET_INFO, RetData.of(list));
     }
 
-    public static <T> ResponseVO<RetData<T>> of(Collection<T> data) {
-        return of(Boolean.TRUE, SUCCESS_RET_CODE, SUCCESS_RET_INFO, RetData.of(data));
+    public static <T> ResponseVO<RetData<T>> of(List<T> list) {
+        return of(Boolean.TRUE, SUCCESS_RET_CODE, SUCCESS_RET_INFO, RetData.of(list));
     }
 
-    public static <T> ResponseVO<RetData<T>> of(String retCode, String retInfo, Collection<T> data) {
-        return of(Boolean.FALSE, retCode, retInfo, RetData.of(data));
+    public static <T> ResponseVO<RetData<T>> of(String retCode, String retInfo, List<T> list) {
+        return of(Boolean.FALSE, retCode, retInfo, RetData.of(list));
     }
 
     public static ResponseVO<Exception> of(Exception e) {
@@ -103,9 +104,9 @@ public class ResponseVO<T> implements Serializable {
     @Data
     public static class RetData<T> {
 
-        private Collection<T> list;
+        private List<T> list;
 
-        static <T> RetData<T> of(Collection<T> list) {
+        static <T> RetData<T> of(List<T> list) {
             RetData<T> result = new RetData<>();
             result.setList(list);
             return result;
