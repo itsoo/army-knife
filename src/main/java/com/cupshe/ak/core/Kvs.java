@@ -12,14 +12,16 @@ import java.util.StringJoiner;
  */
 public class Kvs implements Iterable<Kv> {
 
+    public static final Kvs EMPTY = new Kvs();
+
     private final Kv head;
     private Kv curr;
-
-    public static final Kvs EMPTY = new Kvs();
+    private int size;
 
     public Kvs() {
         head = Kv.EMPTY;
         curr = head;
+        size = 0;
     }
 
     public static Kvs emptyKvs() {
@@ -29,6 +31,19 @@ public class Kvs implements Iterable<Kv> {
     public void add(Kv kv) {
         curr.setNext(kv);
         curr = curr.getNext();
+        size++;
+    }
+
+    public void addAll(Kvs kvs) {
+        kvs.forEach(this::add);
+    }
+
+    public int size() {
+        return size;
+    }
+
+    public boolean isEmpty() {
+        return this == EMPTY || size == 0;
     }
 
     @Override
