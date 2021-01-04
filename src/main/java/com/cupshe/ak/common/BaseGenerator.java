@@ -31,9 +31,10 @@ public abstract class BaseGenerator {
         @Override
         public String next() {
             char[] result = new char[count];
+            Random random = new Random();
             for (int i = 0; i < count; i++) {
-                int idx = new Random().nextInt(LETTER_POOL.length());
-                result[i] = LETTER_POOL.charAt(idx);
+                int index = random.nextInt(LETTER_POOL.length());
+                result[i] = LETTER_POOL.charAt(index);
             }
 
             return new String(result);
