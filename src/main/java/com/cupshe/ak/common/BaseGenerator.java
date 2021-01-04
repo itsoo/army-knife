@@ -1,6 +1,7 @@
 package com.cupshe.ak.common;
 
 import com.cupshe.ak.net.AddressUtils;
+import com.cupshe.ak.text.StringUtils;
 
 import java.util.Random;
 
@@ -9,28 +10,37 @@ import java.util.Random;
  *
  * @author zxy
  */
-public class BaseGenerator {
+public abstract class BaseGenerator {
 
-    private static final String ROUND = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    public abstract Object next();
 
-    private static final IdGenerators ID_GENERATORS = new IdGenerators(1, AddressUtils.getLocalIp4AddressMod32());
+    public static class RandomLetterGenerator extends BaseGenerator {
 
-    public static String generateRandomString(int count) {
-        char[] result = new char[count];
-        for (int i = 0; i < count; i++) {
-            int idx = new Random().nextInt(ROUND.length());
-            result[i] = ROUND.charAt(idx);
+        private static final String LETTER_POOL = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+        private final int count;
+
+        private RandomLetterGenerator(int count) {
+            this.count = count;
         }
 
-        return new String(result);
+        public static RandomLetterGenerator of(int count) {
+            return new RandomLetterGenerator(count);
+        }
+
+        @Override
+        public String next() {
+            char[] result = new char[count];
+            for (int i = 0; i < count; i++) {
+                int idx = new Random().nextInt(LETTER_POOL.length());
+                result[i] = LETTER_POOL.charAt(idx);
+            }
+
+            return new String(result);
+        }
     }
 
-    public static long generateGlobalId() {
-        return ID_GENERATORS.nextId();
-    }
-
-    /*** 全局唯一 ID 生成器 */
-    private static class IdGenerators {
+    public static class PrimaryKeyGenerator extends BaseGenerator {
 
         private static final long START_TIMESTAMP = 1584843269315L;
 
@@ -52,39 +62,45 @@ public class BaseGenerator {
         /*** 最大支持的 12 位存储序列号: 4095 */
         private static final long MAX_DATA_CENTER_NUM = ~(-1L << DATA_CENTER_BIT);
 
-        /*** 机器标识较序列号的偏移量 */
-        private static final long MACHINE_LEFT = SEQUENCE_BIT;
-
-        /*** 数据中心较序列号的偏移量 */
         private static final long DATA_CENTER_LEFT = SEQUENCE_BIT + MACHINE_BIT;
 
-        /*** 时间戳较序列号的偏移量 */
         private static final long TIMESTAMP_LEFT = DATA_CENTER_LEFT + DATA_CENTER_BIT;
 
         /*** 数据中心 */
-        private long dataCenterId;
+        private final long dataCenterId;
 
         /*** 机器标识 */
-        private long machineId;
+        private final long machineId;
 
-        /*** 序列号 */
         private long sequence = 0L;
 
-        /*** 上一次时间戳 */
         private static long lastTimestamp = -1L;
 
-        private IdGenerators(long dataCenterId, long machineId) {
+        private PrimaryKeyGenerator(long dataCenterId, long machineId) {
+            String messageTemplate = "{} can't be greater than {} or less than 0";
             if (dataCenterId > MAX_DATA_CENTER_NUM || dataCenterId < 0) {
-                throw new IllegalArgumentException("dataCenterId can't be greater than MAX_DATA_CENTER_NUM or less than 0");
-            } else if (machineId > MAX_MACHINE_NUM || machineId < 0) {
-                throw new IllegalArgumentException("machineId can't be greater than MAX_MACHINE_NUM or less than 0");
+                throw new IllegalArgumentException(
+                        StringUtils.getFormatString(messageTemplate, "dataCenterId", MAX_DATA_CENTER_NUM));
+            }
+            if (machineId > MAX_MACHINE_NUM || machineId < 0) {
+                throw new IllegalArgumentException(
+                        StringUtils.getFormatString(messageTemplate, "machineId", MAX_MACHINE_NUM));
             }
 
             this.dataCenterId = dataCenterId;
             this.machineId = machineId;
         }
 
-        private synchronized long nextId() {
+        public static PrimaryKeyGenerator of(long dataCenterId) {
+            return of(dataCenterId, AddressUtils.getLocalIp4AddressMod32());
+        }
+
+        public static PrimaryKeyGenerator of(long dataCenterId, long machineId) {
+            return new PrimaryKeyGenerator(dataCenterId, machineId);
+        }
+
+        @Override
+        public synchronized Long next() {
             long currTimestamp = getNewTimestamp();
             if (currTimestamp < lastTimestamp) {
                 throw new RuntimeException("Clock moved backwards. Refusing to generate id");
@@ -101,7 +117,7 @@ public class BaseGenerator {
             lastTimestamp = currTimestamp;
             return (currTimestamp - START_TIMESTAMP) << TIMESTAMP_LEFT
                     | dataCenterId << DATA_CENTER_LEFT
-                    | machineId << MACHINE_LEFT
+                    | machineId << SEQUENCE_BIT
                     | sequence;
         }
 
