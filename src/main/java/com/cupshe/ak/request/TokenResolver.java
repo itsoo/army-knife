@@ -1,5 +1,6 @@
 package com.cupshe.ak.request;
 
+import com.cupshe.ak.annotation.CustomerToken;
 import com.cupshe.ak.dto.CustomerInfoDto;
 import com.cupshe.ak.exception.BusinessException;
 import com.cupshe.ak.jwt.JwtUtil;
@@ -57,7 +58,14 @@ public class TokenResolver implements HandlerMethodArgumentResolver {
             log.warn("received non-http request!");
             return null;
         }
+        CustomerToken customerToken = parameter.getParameterAnnotation(CustomerToken.class);
+        boolean tokenRequired = customerToken == null || customerToken.required();
         String token = web.getHeader(TOKEN);
+        parameter.getParameterAnnotations();
+        log.info("当前token信息是 {} " ,token);
+        if(StringUtils.isBlank(token) || !tokenRequired ){
+            return new CustomerInfoDto();
+        }
         if (StringUtils.isBlank(token)) {
             throw new BusinessException(NOTLOGIN.getErrCode(),NOTLOGIN.getErrorMessage());
         }

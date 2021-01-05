@@ -1,10 +1,9 @@
 package com.cupshe.ak.net;
 
+import lombok.SneakyThrows;
+
 import java.net.*;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * AddressUtils
@@ -29,31 +28,30 @@ public class AddressUtils {
      *
      * @return Optional Inet4Address
      */
+    @SneakyThrows
     public static Optional<Inet4Address> getLocalIp4Address() {
-        try {
-            List<Inet4Address> ni = getLocalIp4AddressFromNetworkInterface();
-            if (ni.size() != 1) {
-                Optional<Inet4Address> socket = getIpBySocket();
-                if (socket.isPresent()) {
-                    return socket;
-                }
-
-                return ni.isEmpty() ? Optional.empty() : Optional.of(ni.get(0));
+        List<Inet4Address> ni = getLocalIp4AddressFromNetworkInterface();
+        if (ni.size() != 1) {
+            Optional<Inet4Address> socket = getIpBySocket();
+            if (socket.isPresent()) {
+                return socket;
             }
 
-            return Optional.of(ni.get(0));
-        } catch (SocketException e) {
-            throw new RuntimeException(e);
+            return ni.isEmpty() ? Optional.empty() : Optional.of(ni.get(0));
         }
+
+        return Optional.of(ni.get(0));
     }
 
-    private static List<Inet4Address> getLocalIp4AddressFromNetworkInterface() throws SocketException {
-        List<Inet4Address> addresses = new ArrayList<>(1);
+    private static List<Inet4Address> getLocalIp4AddressFromNetworkInterface()
+            throws SocketException {
+
         Enumeration<NetworkInterface> nis = NetworkInterface.getNetworkInterfaces();
         if (nis == null) {
-            return addresses;
+            return Collections.emptyList();
         }
 
+        List<Inet4Address> result = new ArrayList<>(1);
         while (nis.hasMoreElements()) {
             NetworkInterface ni = nis.nextElement();
             if (!isValidInterface(ni)) {
@@ -64,22 +62,22 @@ public class AddressUtils {
             while (ias.hasMoreElements()) {
                 InetAddress ia = ias.nextElement();
                 if (isValidAddress(ia)) {
-                    addresses.add((Inet4Address) ia);
+                    result.add((Inet4Address) ia);
                 }
             }
         }
 
-        return addresses;
+        return result;
     }
 
-    private static Optional<Inet4Address> getIpBySocket() throws SocketException {
+    private static Optional<Inet4Address> getIpBySocket()
+            throws SocketException, UnknownHostException {
+
         try (DatagramSocket socket = new DatagramSocket()) {
             socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
             if (socket.getLocalAddress() instanceof Inet4Address) {
                 return Optional.of((Inet4Address) socket.getLocalAddress());
             }
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
         }
 
         return Optional.empty();
@@ -91,8 +89,13 @@ public class AddressUtils {
      * @param ni 网卡
      * @return boolean
      */
-    private static boolean isValidInterface(NetworkInterface ni) throws SocketException {
-        return !ni.isLoopback() && !ni.isPointToPoint() && ni.isUp() && !ni.isVirtual()
+    private static boolean isValidInterface(NetworkInterface ni)
+            throws SocketException {
+
+        return !ni.isLoopback()
+                && !ni.isPointToPoint()
+                && ni.isUp()
+                && !ni.isVirtual()
                 && (ni.getName().startsWith("eth") || ni.getName().startsWith("ens"));
     }
 
@@ -103,6 +106,8 @@ public class AddressUtils {
      * @return boolean
      */
     private static boolean isValidAddress(InetAddress address) {
-        return address instanceof Inet4Address && address.isSiteLocalAddress() && !address.isLoopbackAddress();
+        return address instanceof Inet4Address
+                && address.isSiteLocalAddress()
+                && !address.isLoopbackAddress();
     }
 }

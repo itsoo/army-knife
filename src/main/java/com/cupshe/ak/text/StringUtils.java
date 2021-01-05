@@ -16,7 +16,7 @@ public class StringUtils {
     }
 
     public static boolean isEmpty(Object obj) {
-        return obj == null || isEmpty(obj.toString());
+        return obj == null || isEquals(EMPTY, obj.toString());
     }
 
     public static boolean isNotEmpty(CharSequence cs) {
@@ -24,12 +24,12 @@ public class StringUtils {
     }
 
     public static boolean isBlank(CharSequence cs) {
-        int strLen;
-        if (cs == null || (strLen = cs.length()) == 0) {
+        int length;
+        if (cs == null || (length = cs.length()) == 0) {
             return true;
         }
 
-        for (int i = 0; i < strLen; i++) {
+        for (int i = 0; i < length; i++) {
             if (!Character.isWhitespace(cs.charAt(i))) {
                 return false;
             }
@@ -60,23 +60,18 @@ public class StringUtils {
     }
 
     public static String trimToEmpty(String str) {
-        return str == null ? EMPTY : str.trim();
+        String ts = trim(str);
+        return isEmpty(ts) ? EMPTY : ts;
     }
 
     public static String getOrDefault(Object obj, Object defaultObj) {
-        return obj == null ? defaultObj.toString() : obj.toString();
+        return obj == null
+                ? defaultObj == null ? null : defaultObj.toString()
+                : obj.toString();
     }
 
     public static String getOrEmpty(Object obj) {
         return getOrDefault(obj.toString(), EMPTY);
-    }
-
-    public static String defaultString(String str) {
-        return defaultString(str, EMPTY);
-    }
-
-    public static String defaultString(String str, String defaultStr) {
-        return str == null ? defaultStr : str;
     }
 
     public static <T extends CharSequence> T defaultIfBlank(T str, T defaultStr) {
@@ -125,9 +120,10 @@ public class StringUtils {
             return null;
         }
 
-        String s0 = str.substring(0, i);
-        String s1 = str.substring(i + delimiter.length());
-        return new String[]{s0, s1};
+        return new String[]{
+                str.substring(0, i),
+                str.substring(i + delimiter.length())
+        };
     }
 
     public static String upperFirstLetter(String str) {

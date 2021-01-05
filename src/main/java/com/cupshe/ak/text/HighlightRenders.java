@@ -34,9 +34,10 @@ public class HighlightRenders {
         @Override
         public String doRender(String content) {
             StringBuilder result = new StringBuilder();
+            result.append("<table style=\"")
+                    .append(FONT_STYLE)
+                    .append("border-collapse: collapse; border-spacing: 0;\">");
             String[] splits = content.split("\n");
-            String template = "<table style=\"%s border-collapse: collapse; border-spacing: 0;\">";
-            result.append(String.format(template, FONT_STYLE));
             for (int i = 0; i < splits.length; i++) {
                 result.append("<tr>");
                 appendLineNumb(result, i + 1);
@@ -120,22 +121,29 @@ public class HighlightRenders {
         }
 
         private void renderHighlightValues(StringBuilder sb, String c) {
-            sb.append("<span style=\"color: #080; font-weight: bold;\">").append(c).append("</span>");
+            sb.append("<span style=\"color: #080; font-weight: bold;\">")
+                    .append(c)
+                    .append("</span>");
         }
 
         private void renderHighlightComments(StringBuilder sb, String c) {
-            sb.append("<span style=\"color: #888; font-style: normal;\">").append(c).append("</span>");
+            sb.append("<span style=\"color: #888; font-style: normal;\">")
+                    .append(c)
+                    .append("</span>");
         }
 
         private void renderHighlightKeywords(StringBuilder sb, String c) {
-            sb.append("<span style=\"color: #04e; font-weight: bold;\">").append(c).append("</span>");
+            sb.append("<span style=\"color: #04e; font-weight: bold;\">")
+                    .append(c)
+                    .append("</span>");
         }
     }
 
     /**
      * 高亮渲染接口留作扩展用
      */
-    private interface HighlightRender {
+    public interface HighlightRender {
+
         /**
          * doRender
          *

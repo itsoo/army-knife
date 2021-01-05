@@ -119,6 +119,7 @@ public class Kvs implements Iterable<Kv> {
         @Override
         public Iterator<Kv> iterator() {
             return new Itr() {
+
                 @Override
                 public boolean hasNext() {
                     return false;

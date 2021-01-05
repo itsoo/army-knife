@@ -1,17 +1,18 @@
 package com.cupshe.ak.text;
 
+import lombok.SneakyThrows;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
-import java.security.GeneralSecurityException;
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Objects;
 
@@ -28,14 +29,16 @@ public class Encrypts {
     /*** 系统内部公用秘钥 */
     private final String rules;
 
-    private static final String DEFAULT_RULES = "cupshe";
-
-    public Encrypts() {
-        this.rules = DEFAULT_RULES;
+    private Encrypts(String rules) {
+        this.rules = rules;
     }
 
-    public Encrypts(String rules) {
-        this.rules = rules;
+    public static Encrypts of() {
+        return of("CUPSHE.COM");
+    }
+
+    public static Encrypts of(String rules) {
+        return new Encrypts(rules);
     }
 
     /**
@@ -44,16 +47,13 @@ public class Encrypts {
      * @param content 源内容
      * @return 加密内容
      */
+    @SneakyThrows
     public String md5Encode(String content) {
         Objects.requireNonNull(content, "content cannot be null.");
-
-        try {
-            MessageDigest message = MessageDigest.getInstance("MD5");
-            byte[] bytes = content.getBytes(StandardCharsets.UTF_8);
-            return String.format("%032x", new BigInteger(1, message.digest(bytes)));
-        } catch (GeneralSecurityException e) {
-            throw new RuntimeException(e);
-        }
+        String md5 = "MD5";
+        MessageDigest message = MessageDigest.getInstance(md5);
+        byte[] bytes = content.getBytes(StandardCharsets.UTF_8);
+        return String.format("%032x", new BigInteger(1, message.digest(bytes)));
     }
 
     /**
@@ -62,16 +62,12 @@ public class Encrypts {
      * @param content 源内容
      * @return 加密内容
      */
+    @SneakyThrows
     public String aesEncode(String content) {
         Objects.requireNonNull(content, "content cannot be null.");
-
-        try {
-            byte[] byteEncode = content.getBytes(StandardCharsets.UTF_8);
-            byte[] byteAes = getCipher(Cipher.ENCRYPT_MODE).doFinal(byteEncode);
-            return new BASE64Encoder().encode(byteAes);
-        } catch (GeneralSecurityException e) {
-            throw new RuntimeException(e);
-        }
+        byte[] byteEncode = content.getBytes(StandardCharsets.UTF_8);
+        byte[] byteAes = getCipher(Cipher.ENCRYPT_MODE).doFinal(byteEncode);
+        return new BASE64Encoder().encode(byteAes);
     }
 
     /**
@@ -80,30 +76,22 @@ public class Encrypts {
      * @param content 源内容
      * @return 解密内容
      */
+    @SneakyThrows
     public String aesDecode(String content) {
         Objects.requireNonNull(content, "content cannot be null.");
-
-        try {
-            byte[] byteContent = new BASE64Decoder().decodeBuffer(content);
-            byte[] byteDecode = getCipher(Cipher.DECRYPT_MODE).doFinal(byteContent);
-            return new String(byteDecode, StandardCharsets.UTF_8);
-        } catch (GeneralSecurityException | IOException e) {
-            throw new RuntimeException(e);
-        }
+        byte[] byteContent = new BASE64Decoder().decodeBuffer(content);
+        byte[] byteDecode = getCipher(Cipher.DECRYPT_MODE).doFinal(byteContent);
+        return new String(byteDecode, StandardCharsets.UTF_8);
     }
 
-    private Cipher getCipher(int mode) {
-        try {
-            KeyGenerator kg = KeyGenerator.getInstance("AES");
-            kg.init(128, new SecureRandom((rules.getBytes(StandardCharsets.UTF_8))));
-            SecretKey originalKey = kg.generateKey();
-            byte[] raw = originalKey.getEncoded();
-            SecretKey key = new SecretKeySpec(raw, "AES");
-            Cipher cipher = Cipher.getInstance("AES");
-            cipher.init(mode, key);
-            return cipher;
-        } catch (GeneralSecurityException e) {
-            throw new RuntimeException(e);
-        }
+    private Cipher getCipher(int mode)
+            throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException {
+
+        String aes = "AES";
+        KeyGenerator kg = KeyGenerator.getInstance(aes);
+        kg.init(128, new SecureRandom((rules.getBytes(StandardCharsets.UTF_8))));
+        Cipher cipher = Cipher.getInstance(aes);
+        cipher.init(mode, new SecretKeySpec(kg.generateKey().getEncoded(), aes));
+        return cipher;
     }
 }

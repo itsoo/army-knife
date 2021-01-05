@@ -37,7 +37,7 @@ public class PageUtils {
      * @param <R>    Result class
      * @return PageInfo
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("all")
     public static <P, R> PageInfo<R> page(List<P> list, ConvertList<P, R> lambda) {
         PageInfo<R> result = new PageInfo(list);
         result.setList(lambda.convert(list));
@@ -52,6 +52,7 @@ public class PageUtils {
      */
     @FunctionalInterface
     public interface ConvertList<P, R> {
+
         /**
          * convert
          *

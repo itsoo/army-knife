@@ -1,6 +1,5 @@
 package com.cupshe.ak.io;
 
-import com.cupshe.ak.text.StringUtils;
 import lombok.SneakyThrows;
 
 import java.io.Closeable;
@@ -17,15 +16,15 @@ import java.nio.charset.StandardCharsets;
 public class IoUtils {
 
     public static OutputStreamWriter getWriter(OutputStream out, Charset charset) {
-        if (null == out) {
+        if (out == null) {
             return null;
         }
 
-        if (null == charset) {
+        if (charset == null) {
             return new OutputStreamWriter(out);
-        } else {
-            return new OutputStreamWriter(out, charset);
         }
+
+        return new OutputStreamWriter(out, charset);
     }
 
     public static void write(OutputStream out, Object... contents) {
@@ -34,25 +33,24 @@ public class IoUtils {
 
     @SneakyThrows
     public static void write(OutputStream out, Charset charset, Object... contents) {
-        OutputStreamWriter osw = null;
-        try {
-            osw = getWriter(out, charset);
+        try (OutputStreamWriter osw = getWriter(out, charset)) {
             for (Object content : contents) {
                 if (content != null) {
-                    osw.write(StringUtils.getOrEmpty(content));
+                    osw.write(content.toString());
                 }
             }
+
             osw.flush();
-        } finally {
-            close(osw);
         }
     }
 
     public static void close(Closeable closeable) {
-        if (null != closeable) {
-            try {
-                closeable.close();
-            } catch (Exception ignore) {}
+        if (closeable == null) {
+            return;
         }
+
+        try {
+            closeable.close();
+        } catch (Exception ignore) {}
     }
 }

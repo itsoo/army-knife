@@ -2,7 +2,6 @@ package com.cupshe.ak.common;
 
 import com.cupshe.ak.request.RequestHeaderUtils;
 import com.cupshe.ak.request.RequestTraceIdUtils;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -19,9 +18,8 @@ import static com.cupshe.ak.common.BaseConstant.*;
  *
  * @author zxy
  */
-@Slf4j
-@Order(Ordered.HIGHEST_PRECEDENCE)
 @ServletComponentScan
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @WebFilter(filterName = "request-filter", urlPatterns = "/*")
 public class AutoRequestCachedConfigurer implements Filter {
 
