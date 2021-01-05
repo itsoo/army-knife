@@ -36,16 +36,20 @@ public class JsonUtils {
         return MAPPER.convertValue(list, getListType(clazz));
     }
 
+    public static <T> List<T> convertList(Object list, JavaType javaType) {
+        return MAPPER.convertValue(list, javaType);
+    }
+
     public static JavaType getListType(Class<?> clazz) {
         return MAPPER.getTypeFactory().constructParametricType(List.class, clazz);
     }
 
-    public static JavaType getJavaType(Type genericType) {
+    public static JavaType getObjectType(Type genericType) {
         if (genericType instanceof ParameterizedType) {
             Type[] actualTypes = ((ParameterizedType) genericType).getActualTypeArguments();
             JavaType[] javaTypes = new JavaType[actualTypes.length];
             for (int i = 0; i < actualTypes.length; i++) {
-                javaTypes[i] = getJavaType(actualTypes[i]);
+                javaTypes[i] = getObjectType(actualTypes[i]);
             }
 
             Class<?> rowClass = (Class<?>) ((ParameterizedType) genericType).getRawType();

@@ -1,15 +1,13 @@
 package com.cupshe.ak.objects;
 
 import com.cupshe.ak.core.Kv;
+import com.cupshe.ak.core.Kvs;
 import com.cupshe.ak.text.StringUtils;
 
 import java.lang.annotation.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * ObjectClasses
@@ -18,17 +16,17 @@ import java.util.List;
  */
 public class ObjectClasses {
 
-    public static List<Kv> getObjectProperties(Object object) {
+    public static Kvs getObjectProperties(Object object) {
         if (object == null) {
-            return Collections.emptyList();
+            return Kvs.emptyKvs();
         }
 
         Field[] fields = object.getClass().getDeclaredFields();
         if (fields.length == 0) {
-            return Collections.emptyList();
+            return Kvs.emptyKvs();
         }
 
-        List<Kv> result = new ArrayList<>();
+        Kvs result = new Kvs();
         for (Field f : fields) {
             result.add(new Kv(f.getName(), getValueByFieldName(f.getName(), object)));
         }
@@ -64,7 +62,9 @@ public class ObjectClasses {
             return StringUtils.lowerFirstLetter(qualifier);
         }
 
-        return StringUtils.lowerFirstLetter(qualifier.substring(i + 1));
+        return qualifier.length() > 1
+                ? StringUtils.lowerFirstLetter(qualifier.substring(i + 1))
+                : qualifier;
     }
 
     public static boolean isInconvertibleClass(Class<?> clazz) {

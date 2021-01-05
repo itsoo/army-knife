@@ -1,6 +1,7 @@
 package com.cupshe.ak.net;
 
 import com.cupshe.ak.text.StringUtils;
+import lombok.SneakyThrows;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;
@@ -14,13 +15,16 @@ import java.nio.charset.StandardCharsets;
 public class UriUtils {
 
     public static String encode(Object value) {
-        return StringUtils.isEmpty(value) ? "" : encode(value.toString(), StandardCharsets.UTF_8);
+        return StringUtils.isEmpty(value)
+                ? StringUtils.EMPTY
+                : encode(value.toString(), StandardCharsets.UTF_8);
     }
 
     public static String encode(String source, Charset charset) {
         return encodeUriComponent(source, charset);
     }
 
+    @SneakyThrows
     private static String encodeUriComponent(String source, Charset charset) {
         if (StringUtils.isEmpty(source)) {
             return source;
@@ -38,26 +42,32 @@ public class UriUtils {
                 bos.write(b);
             } else {
                 bos.write('%');
-                char hex1 = Character.toUpperCase(Character.forDigit((b >> 4) & 0xF, 16));
-                char hex2 = Character.toUpperCase(Character.forDigit(b & 0xF, 16));
-                bos.write(hex1);
-                bos.write(hex2);
+                bos.write(Character.toUpperCase(Character.forDigit((b >> 4) & 0xF, 16)));
+                bos.write(Character.toUpperCase(Character.forDigit(b & 0xF, 16)));
                 changed = true;
             }
         }
 
-        return (changed ? new String(bos.toByteArray(), charset) : source);
+        return changed
+                ? bos.toString(charset.name())
+                : source;
     }
 
     private static boolean isAllowed(int c) {
-        return (isAlpha(c) || isDigit(c) || '-' == c || '.' == c || '_' == c || '~' == c);
+        return isAlpha(c)
+                || isDigit(c)
+                || '-' == c
+                || '.' == c
+                || '_' == c
+                || '~' == c;
     }
 
     private static boolean isAlpha(int c) {
-        return (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z');
+        return c >= 'a' && c <= 'z'
+                || c >= 'A' && c <= 'Z';
     }
 
     private static boolean isDigit(int c) {
-        return (c >= '0' && c <= '9');
+        return c >= '0' && c <= '9';
     }
 }

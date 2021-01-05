@@ -48,20 +48,20 @@ public abstract class BaseGenerator {
         /*** 序列号占用的位数 */
         private static final long SEQUENCE_BIT = 12L;
 
-        /*** 机器标识占用的位数 */
-        private static final long MACHINE_BIT = 5L;
+        /*** 最大支持的 12 位存储序列号: 4095 */
+        private static final long MAX_SEQUENCE = ~(-1L << SEQUENCE_BIT);
 
         /*** 数据中心占用的位数 */
         private static final long DATA_CENTER_BIT = 5L;
 
         /*** 最大支持的数据中心数量: 31 */
-        private static final long MAX_SEQUENCE = ~(-1L << SEQUENCE_BIT);
+        private static final long MAX_DATA_CENTER_NUM = ~(-1L << DATA_CENTER_BIT);
+
+        /*** 机器标识占用的位数 */
+        private static final long MACHINE_BIT = 5L;
 
         /*** 最大支持的机器数量: 31 */
         private static final long MAX_MACHINE_NUM = ~(-1L << MACHINE_BIT);
-
-        /*** 最大支持的 12 位存储序列号: 4095 */
-        private static final long MAX_DATA_CENTER_NUM = ~(-1L << DATA_CENTER_BIT);
 
         private static final long DATA_CENTER_LEFT = SEQUENCE_BIT + MACHINE_BIT;
 
