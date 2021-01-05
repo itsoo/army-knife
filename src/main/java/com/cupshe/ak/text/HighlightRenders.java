@@ -143,6 +143,7 @@ public class HighlightRenders {
      * 高亮渲染接口留作扩展用
      */
     public interface HighlightRender {
+
         /**
          * doRender
          *
