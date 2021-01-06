@@ -34,15 +34,27 @@ public class ObjectClasses {
         return result;
     }
 
-    public static Object getValueByFieldName(String filedName, Object instance) {
-        String getter = getterMethodName(filedName);
-        return getValueByMethodName(getter, instance);
+    public static Object getValueByFieldName(String fieldName, Object instance) {
+        String getterMethodName = "get" + StringUtils.upperFirstLetter(fieldName);
+        return getValueByMethodName(getterMethodName, instance);
     }
 
     public static Object getValueByMethodName(String methodName, Object instance) {
         try {
-            Method method = instance.getClass().getDeclaredMethod(methodName);
-            if (isNotPublic(method) && !method.isAccessible()) {
+            return getValueByMethod(
+                    instance.getClass().getDeclaredMethod(methodName),
+                    instance);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static Object getValueByMethod(Method method, Object instance) {
+        try {
+            int mthModifier = method.getModifiers();
+            int clsModifier = method.getDeclaringClass().getModifiers();
+            if ((!Modifier.isPublic(mthModifier) || !Modifier.isPublic(clsModifier))
+                    && !method.isAccessible()) {
                 method.setAccessible(true);
             }
 
@@ -104,14 +116,5 @@ public class ObjectClasses {
                 || clazz == Repeatable.class
                 || clazz == Retention.class
                 || clazz == Target.class;
-    }
-
-    private static String getterMethodName(String fieldName) {
-        return "get" + StringUtils.upperFirstLetter(fieldName);
-    }
-
-    private static boolean isNotPublic(Method method) {
-        return !Modifier.isPublic(method.getModifiers())
-                || !Modifier.isPublic(method.getDeclaringClass().getModifiers());
     }
 }

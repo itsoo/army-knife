@@ -20,11 +20,9 @@ public class IoUtils {
             return null;
         }
 
-        if (charset == null) {
-            return new OutputStreamWriter(out);
-        }
-
-        return new OutputStreamWriter(out, charset);
+        return charset == null
+                ? new OutputStreamWriter(out)
+                : new OutputStreamWriter(out, charset);
     }
 
     public static void write(OutputStream out, Object... contents) {

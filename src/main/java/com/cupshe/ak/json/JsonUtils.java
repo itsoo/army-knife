@@ -20,15 +20,21 @@ public class JsonUtils {
     private static final ObjectMapper MAPPER = new ObjectMapper()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-    public static <T> T jsonToObject(String json, Class<T> clazz) throws JsonProcessingException {
+    public static <T> T jsonToObject(String json, Class<T> clazz)
+            throws JsonProcessingException {
+
         return MAPPER.readValue(json, clazz);
     }
 
-    public static <T> T jsonToObject(String json, JavaType javaType) throws JsonProcessingException {
+    public static <T> T jsonToObject(String json, JavaType javaType)
+            throws JsonProcessingException {
+
         return MAPPER.readValue(json, javaType);
     }
 
-    public static <T> String objectToJson(T params) throws JsonProcessingException {
+    public static <T> String objectToJson(T params)
+            throws JsonProcessingException {
+
         return MAPPER.writeValueAsString(params);
     }
 
@@ -41,21 +47,29 @@ public class JsonUtils {
     }
 
     public static JavaType getListType(Class<?> clazz) {
-        return MAPPER.getTypeFactory().constructParametricType(List.class, clazz);
+        return MAPPER
+                .getTypeFactory()
+                .constructParametricType(List.class, clazz);
     }
 
     public static JavaType getObjectType(Type genericType) {
         if (genericType instanceof ParameterizedType) {
-            Type[] actualTypes = ((ParameterizedType) genericType).getActualTypeArguments();
+            ParameterizedType parameterType = (ParameterizedType) genericType;
+            Type[] actualTypes = parameterType.getActualTypeArguments();
             JavaType[] javaTypes = new JavaType[actualTypes.length];
             for (int i = 0; i < actualTypes.length; i++) {
                 javaTypes[i] = getObjectType(actualTypes[i]);
             }
 
-            Class<?> rowClass = (Class<?>) ((ParameterizedType) genericType).getRawType();
-            return TypeFactory.defaultInstance().constructParametricType(rowClass, javaTypes);
+            return getParametricType(parameterType.getRawType(), javaTypes);
         }
 
-        return TypeFactory.defaultInstance().constructParametricType((Class<?>) genericType, new JavaType[0]);
+        return getParametricType(genericType, new JavaType[0]);
+    }
+
+    private static JavaType getParametricType(Type rawType, JavaType[] javaTypes) {
+        return TypeFactory
+                .defaultInstance()
+                .constructParametricType((Class<?>) rawType, javaTypes);
     }
 }
