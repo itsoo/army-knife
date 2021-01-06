@@ -37,6 +37,9 @@ public class Kv {
 
     @Override
     public String toString() {
-        return String.format("{key: %s, value: %s}", key, value);
+        return "{" +
+                "key=" + key +
+                ", value=" + value +
+                '}';
     }
 }
