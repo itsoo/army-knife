@@ -58,10 +58,7 @@ public class Kvs implements Iterable<Kv> {
     @Override
     public String toString() {
         StringJoiner joiner = new StringJoiner(", ");
-        for (Kv kv : this) {
-            joiner.add(kv.toString());
-        }
-
+        this.forEach(t -> joiner.add(t.toString()));
         return "Kvs[" + joiner.toString() + ']';
     }
 
@@ -93,18 +90,10 @@ public class Kvs implements Iterable<Kv> {
     private static class EmptyKvs extends Kvs {
 
         @Override
-        public void add(Kv kv) {
-            //---------------------
-            // EMPTY BODY
-            //---------------------
-        }
+        public void add(Kv kv) {}
 
         @Override
-        public void addAll(Kvs kvs) {
-            //---------------------
-            // EMPTY BODY
-            //---------------------
-        }
+        public void addAll(Kvs kvs) {}
 
         @Override
         public int size() {

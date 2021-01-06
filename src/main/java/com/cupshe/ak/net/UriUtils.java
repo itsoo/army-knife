@@ -32,7 +32,13 @@ public class UriUtils {
 
         byte[] bytes = source.getBytes(charset);
         ByteArrayOutputStream bos = new ByteArrayOutputStream(bytes.length);
-        boolean changed = false;
+        return write(bytes, bos)
+                ? bos.toString(charset.name())
+                : source;
+    }
+
+    private static boolean write(byte[] bytes, ByteArrayOutputStream bos) {
+        boolean result = false;
         for (byte b : bytes) {
             if (b < 0) {
                 b += 256;
@@ -44,13 +50,11 @@ public class UriUtils {
                 bos.write('%');
                 bos.write(Character.toUpperCase(Character.forDigit((b >> 4) & 0xF, 16)));
                 bos.write(Character.toUpperCase(Character.forDigit(b & 0xF, 16)));
-                changed = true;
+                result = true;
             }
         }
 
-        return changed
-                ? bos.toString(charset.name())
-                : source;
+        return result;
     }
 
     private static boolean isAllowed(int c) {
@@ -63,8 +67,8 @@ public class UriUtils {
     }
 
     private static boolean isAlpha(int c) {
-        return c >= 'a' && c <= 'z'
-                || c >= 'A' && c <= 'Z';
+        return (c >= 'a' && c <= 'z')
+                || (c >= 'A' && c <= 'Z');
     }
 
     private static boolean isDigit(int c) {
