@@ -31,6 +31,12 @@ public class ArrayUtils {
         return result;
     }
 
+    @Deprecated
+    @SafeVarargs
+    public static <T> T[] concat(T[] array, T[]... arrays) {
+        return merge(array, arrays);
+    }
+
     @SafeVarargs
     public static <T> T[] merge(T[] array, T[]... arrays) {
         if (isEmpty(arrays)) {
