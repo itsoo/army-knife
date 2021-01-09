@@ -8,9 +8,9 @@ package com.cupshe.ak.enums;
  */
 public enum ExceptionEnums {
     //未登录
-    NOTLOGIN("CS100001","用户未登录"),
-    TOKENEXPIRED("CS100002","用户token信息过期"),
-    TOKENERROR("CS100003","用户token信息异常");
+    NOTLOGIN("CS100001","user not login"),
+    TOKENEXPIRED("CS100002","token is exipred"),
+    TOKENERROR("CS100003","token has exception");
 
 
     /**
