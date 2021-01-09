@@ -63,12 +63,14 @@ public class TokenResolver implements HandlerMethodArgumentResolver {
         String token = web.getHeader(TOKEN);
         parameter.getParameterAnnotations();
         log.info("当前token信息是 {} " ,token);
-        if(StringUtils.isBlank(token) || !tokenRequired ){
+        if (StringUtils.isBlank(token)) {
+            if (tokenRequired) {
+                throw new BusinessException(NOTLOGIN.getErrCode(),NOTLOGIN.getErrorMessage());
+            }
+
             return new CustomerInfoDto();
         }
-        if (StringUtils.isBlank(token)) {
-            throw new BusinessException(NOTLOGIN.getErrCode(),NOTLOGIN.getErrorMessage());
-        }
+
         return JwtUtil.getCustomerFromToken(token);
     }
 }
