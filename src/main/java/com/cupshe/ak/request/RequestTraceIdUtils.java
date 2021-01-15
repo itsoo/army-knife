@@ -18,25 +18,16 @@ import static com.cupshe.ak.common.BaseConstant.TRACE_ID_KEY;
 public class RequestTraceIdUtils {
 
     public static String genericTraceId() {
+        String result = null;
         RequestAttributes rqs = RequestContextHolder.getRequestAttributes();
         if (rqs instanceof ServletRequestAttributes) {
-            return getTraceId(((ServletRequestAttributes) rqs).getRequest());
+            result = getTraceId(((ServletRequestAttributes) rqs).getRequest());
         }
 
-        return StringUtils.defaultIfBlank(getTraceId(), UuidUtils.createUuid());
-    }
-
-    public static String getTraceId() {
-        RequestAttributes rqs = RequestContextHolder.getRequestAttributes();
-        if (rqs instanceof ServletRequestAttributes) {
-            HttpServletRequest req = ((ServletRequestAttributes) rqs).getRequest();
-            return req.getHeader(TRACE_ID_KEY);
-        }
-
-        return null;
+        return StringUtils.defaultIfBlank(result, UuidUtils.createUuid());
     }
 
     public static String getTraceId(HttpServletRequest req) {
-        return StringUtils.defaultIfBlank(req.getHeader(TRACE_ID_KEY), getTraceId());
+        return req.getHeader(TRACE_ID_KEY);
     }
 }
