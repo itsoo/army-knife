@@ -10,7 +10,7 @@ public class BaseConstant {
     /**
      * trace-id key
      */
-    public static final String TRACE_ID_KEY = "Trace-ID";
+    public static final String TRACE_ID_KEY = "X-Trace-ID";
 
     /**
      * session-id key
@@ -20,10 +20,10 @@ public class BaseConstant {
     /**
      * 身份认证字段
      */
-    public static final String AUTHORIZATION = "Authorization";
+    public static final String TOKEN_KEY = "token";
 
     /**
-     * 身份认证字段
+     * MDC logging key
      */
-    public static final String TOKEN_KEY = "token";
+    public static final String MDC_SESSION_KEY = "sessionId";
 }
