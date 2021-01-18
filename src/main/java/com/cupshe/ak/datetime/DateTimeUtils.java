@@ -6,7 +6,9 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -150,5 +152,44 @@ public class DateTimeUtils {
     public static LocalDateTime asLocalDateTime(Date date,String zone) {
         return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.of(zone)).toLocalDateTime();
     }
-    
+
+    /**
+     * 获取时间字符串
+     * @param timeZone
+     * @return
+     */
+    public static String getTimeZoneDateTimeString(String timeZone) {
+        TimeZone time1 = TimeZone.getTimeZone(timeZone);
+        Date today1 = Calendar.getInstance(time1, Locale.US).getTime();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DEFAULT_FORMAT);
+        simpleDateFormat.setTimeZone(time1);
+        String format = simpleDateFormat.format(today1);
+        return format;
+    }
+
+    /**
+     * 获取时间Date
+     * @return
+     */
+    public static Date getTimeZoneDateTimeDate(String timeZone) {
+        String dateTimeString = getTimeZoneDateTimeString(timeZone);
+        Date date = parse(dateTimeString, DEFAULT_FORMAT);
+        return date;
+    }
+
+    /**
+     * 获取GMT+1date
+     * @return
+     */
+    public static String getgmtPlus1DateTimeString() {
+        return getTimeZoneDateTimeString(DEFAULT_TIME_ZONE);
+    }
+
+    /**
+     * 获取GMT+1date
+     * @return
+     */
+    public static Date getgmtPlus1Date() {
+        return getTimeZoneDateTimeDate(DEFAULT_TIME_ZONE);
+    }
 }
