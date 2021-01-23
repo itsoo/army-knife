@@ -7,16 +7,12 @@ import com.cupshe.ak.jwt.JwtUtil;
 import com.cupshe.ak.text.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import static com.cupshe.ak.constants.SystemConstants.TOKEN;
 import static com.cupshe.ak.enums.ExceptionEnums.NOTLOGIN;
@@ -24,10 +20,8 @@ import static com.cupshe.ak.enums.ExceptionEnums.NOTLOGIN;
 /**
  *
  */
-@Component
 @Slf4j
 public class TokenResolver implements HandlerMethodArgumentResolver {
-
 
     /**
      * 判断当前方法的参数是否声明了 CustomerInfoDto类型
@@ -50,25 +44,29 @@ public class TokenResolver implements HandlerMethodArgumentResolver {
      * @param web       原生的请求
      * @param binder    binder工厂类。
      * @return token 对应 CustomerInfoDto 对象
-     * @throws Exception 必需的值不存在。
      */
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer container, NativeWebRequest web, WebDataBinderFactory binder) throws Exception {
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer container, NativeWebRequest web,
+                                  WebDataBinderFactory binder) {
+
         if (!(web.getNativeRequest() instanceof HttpServletRequest)) {
             log.warn("received non-http request!");
             return null;
         }
+
         CustomerToken customerToken = parameter.getParameterAnnotation(CustomerToken.class);
-        boolean tokenRequired = customerToken == null || customerToken.required();
+        boolean tokenRequired = (customerToken == null || customerToken.required());
         String token = web.getHeader(TOKEN);
-        parameter.getParameterAnnotations();
-        log.info("当前token信息是 {} " ,token);
-        if(StringUtils.isBlank(token) || !tokenRequired ){
+        log.info("当前token信息是 {} ", token);
+
+        if (StringUtils.isBlank(token)) {
+            if (tokenRequired) {
+                throw new BusinessException(NOTLOGIN.getErrCode(), NOTLOGIN.getErrorMessage());
+            }
+
             return new CustomerInfoDto();
         }
-        if (StringUtils.isBlank(token)) {
-            throw new BusinessException(NOTLOGIN.getErrCode(),NOTLOGIN.getErrorMessage());
-        }
+
         return JwtUtil.getCustomerFromToken(token);
     }
 }

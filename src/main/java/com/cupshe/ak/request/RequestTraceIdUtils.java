@@ -2,10 +2,12 @@ package com.cupshe.ak.request;
 
 import com.cupshe.ak.net.UuidUtils;
 import com.cupshe.ak.text.StringUtils;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.cupshe.ak.common.BaseConstant.REQ_TRACE_ID_STORE;
 import static com.cupshe.ak.common.BaseConstant.TRACE_ID_KEY;
 
 /**
@@ -16,34 +18,16 @@ import static com.cupshe.ak.common.BaseConstant.TRACE_ID_KEY;
 public class RequestTraceIdUtils {
 
     public static String genericTraceId() {
-        String result = getTraceId();
-        if (StringUtils.isBlank(result)) {
-            result = UuidUtils.createUuid();
+        String result = null;
+        RequestAttributes rqs = RequestContextHolder.getRequestAttributes();
+        if (rqs instanceof ServletRequestAttributes) {
+            result = getTraceId(((ServletRequestAttributes) rqs).getRequest());
         }
 
-        setTraceId(result);
-        return result;
-    }
-
-    public static String genericTraceId(HttpServletRequest req) {
-        String result = getTraceId(req);
-        setTraceId(result);
-        return result;
-    }
-
-    public static String getTraceId() {
-        return REQ_TRACE_ID_STORE.get();
+        return StringUtils.defaultIfBlank(result, UuidUtils.createUuid());
     }
 
     public static String getTraceId(HttpServletRequest req) {
-        return StringUtils.defaultIfBlank(req.getHeader(TRACE_ID_KEY), getTraceId());
-    }
-
-    public static void setTraceId(String traceId) {
-        REQ_TRACE_ID_STORE.set(traceId);
-    }
-
-    public static void setTraceId(HttpServletRequest req) {
-        setTraceId(getTraceId(req));
+        return req.getHeader(TRACE_ID_KEY);
     }
 }

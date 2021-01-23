@@ -1,7 +1,5 @@
 package com.cupshe.ak.common;
 
-import java.util.Map;
-
 /**
  * BaseConstant
  *
@@ -10,24 +8,9 @@ import java.util.Map;
 public class BaseConstant {
 
     /**
-     * request trace-id store
-     */
-    public static final InheritableThreadLocal<String> REQ_TRACE_ID_STORE = new InheritableThreadLocal<>();
-
-    /**
-     * request headers store
-     */
-    public static final InheritableThreadLocal<Map<String, String>> REQ_HEADERS_STORE = new InheritableThreadLocal<>();
-
-    /**
-     * request params store
-     */
-    public static final InheritableThreadLocal<Map<String, String[]>> REQ_PARAMS_STORE = new InheritableThreadLocal<>();
-
-    /**
      * trace-id key
      */
-    public static final String TRACE_ID_KEY = "Trace-ID";
+    public static final String TRACE_ID_KEY = "X-Trace-ID";
 
     /**
      * session-id key
@@ -37,10 +20,10 @@ public class BaseConstant {
     /**
      * 身份认证字段
      */
-    public static final String AUTHORIZATION = "Authorization";
+    public static final String TOKEN_KEY = "token";
 
     /**
-     * 身份认证字段
+     * MDC logging key
      */
-    public static final String TOKEN_KEY = "token";
+    public static final String MDC_SESSION_KEY = "sessionId";
 }
