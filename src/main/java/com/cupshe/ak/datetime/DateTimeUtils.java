@@ -59,10 +59,10 @@ public class DateTimeUtils {
     public static String format(Date date, String pattern, TimeZone timeZone) {
         return date == null ? null : getDateFormat(pattern, timeZone).format(date);
     }
-
     public static Date parse(String date) {
         return parse(date, DEFAULT_FORMAT);
     }
+
 
     public static Date parse(String date, String pattern) {
         return parse(date, pattern, TimeZone.getDefault());
