@@ -71,7 +71,7 @@ public class StringUtils {
     }
 
     public static String getOrEmpty(Object obj) {
-        return getOrDefault(obj.toString(), EMPTY);
+        return getOrDefault(obj, EMPTY);
     }
 
     public static <T extends CharSequence> T defaultIfBlank(T str, T defaultStr) {
