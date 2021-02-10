@@ -200,6 +200,14 @@ public class StringUtils {
         return MessageFormatter.arrayFormat(message, args).getMessage();
     }
 
+    public static String appendWithoutStartsWith(String str, String prefix) {
+        if (isBlank(str)) {
+            return null;
+        }
+
+        return str.startsWith(prefix) ? str : (prefix + str);
+    }
+
     private static boolean needUpperFirstLetter(char c) {
         return c >= 'a' && c <= 'z';
     }
