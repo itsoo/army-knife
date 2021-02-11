@@ -202,7 +202,7 @@ public class StringUtils {
 
     public static String appendWithoutStartsWith(String str, String prefix) {
         if (isBlank(str)) {
-            return null;
+            return EMPTY;
         }
 
         return str.startsWith(prefix) ? str : (prefix + str);
