@@ -3,7 +3,7 @@ package com.cupshe.ak.common;
 import com.cupshe.ak.net.AddressUtils;
 import com.cupshe.ak.text.StringUtils;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * BaseGenerator
@@ -31,7 +31,7 @@ public abstract class BaseGenerator {
         @Override
         public String next() {
             char[] result = new char[count];
-            Random random = new Random();
+            ThreadLocalRandom random = ThreadLocalRandom.current();
             for (int i = 0; i < count; i++) {
                 int index = random.nextInt(LETTER_POOL.length());
                 result[i] = LETTER_POOL.charAt(index);
