@@ -4,6 +4,7 @@ import java.util.*;
 
 /**
  * TrieFilter
+ * <p>Trie-tree data structure, used to capture keywords.
  *
  * @author zxy
  */
