@@ -1,7 +1,5 @@
 package com.cupshe.ak.text;
 
-import lombok.ToString;
-
 import java.util.*;
 
 /**
@@ -15,7 +13,7 @@ public class TrieFilter {
 
     private TrieFilter(Collection<String> dict) {
         this.root = new TrieNode(Character.MIN_VALUE);
-        this.init(Objects.isNull(dict) ? Collections.emptySet() : dict);
+        this.init(dict == null ? Collections.emptySet() : dict);
     }
 
     public static TrieFilter create(Collection<String> dict) {
@@ -43,18 +41,14 @@ public class TrieFilter {
             for (TrieNode childNode : node.children) {
                 if (contains(str, ++i, childNode)) {
                     return true;
-                } else {
-                    --i;
                 }
+
+                --i;
             }
         }
 
         return false;
     }
-
-    //------------------------------------------
-    // INITIALIZE DICTIONARIES
-    //------------------------------------------
 
     private void init(Collection<String> src) {
         for (String s : src) {
@@ -80,7 +74,6 @@ public class TrieFilter {
     /**
      * TrieNode
      */
-    @ToString
     private static class TrieNode {
 
         final char literal;
@@ -90,7 +83,7 @@ public class TrieFilter {
         boolean isEnd;
 
         TrieNode(char literal) {
-            this.literal = toLower(literal);
+            this.literal = Character.toLowerCase(literal);
             this.children = new LinkedHashSet<>();
             this.isEnd = false;
         }
@@ -108,15 +101,11 @@ public class TrieFilter {
         }
 
         boolean equals(char tar) {
-            return literal == toLower(tar);
+            return literal == Character.toLowerCase(tar);
         }
 
         boolean equals(TrieNode tar) {
-            return (this == tar) || (tar != null && literal == toLower(tar.literal));
-        }
-
-        char toLower(char tar) {
-            return Character.isUpperCase(tar) ? ((char) (tar + 32)) : tar;
+            return (this == tar) || (tar != null && equals(tar.literal));
         }
     }
 }
