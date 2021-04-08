@@ -13,8 +13,8 @@ public class TrieFilter {
     private final TrieNode root;
 
     private TrieFilter(Collection<String> dict) {
-        this.root = new TrieNode(Character.MIN_VALUE);
-        this.init(dict == null ? Collections.emptySet() : dict);
+        this.root = Tks.createEmptyNode();
+        this.init(Tks.getOrDefault(dict));
     }
 
     public static TrieFilter create(Collection<String> dict) {
@@ -106,7 +106,23 @@ public class TrieFilter {
         }
 
         boolean equals(TrieNode tar) {
-            return (this == tar) || (tar != null && equals(tar.literal));
+            return (this == tar) || (Objects.nonNull(tar) && equals(tar.literal));
+        }
+    }
+
+    /**
+     * The private constants and optionals
+     */
+    private static class Tks {
+
+        private static final char EMPTY_CHAR = '\0';
+
+        static TrieNode createEmptyNode() {
+            return new TrieNode(EMPTY_CHAR);
+        }
+
+        static Collection<String> getOrDefault(Collection<String> set) {
+            return Objects.isNull(set) ? Collections.emptySet() : set;
         }
     }
 }
